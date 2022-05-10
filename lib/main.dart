@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:qanvas/router/router_provider.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(
     const ProviderScope(
         child: Myapp()

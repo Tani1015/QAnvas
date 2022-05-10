@@ -132,41 +132,7 @@ class QuestionAddScreen extends HookConsumerWidget{
                 ),
               )
           )
-        ],
-      ),
-    ),
-      floatingActionButton: Column(
-        verticalDirection: VerticalDirection.up,
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          FloatingActionButton(
-            heroTag: "draw",
-            child: const Icon(Icons.auto_fix_high),
-            onPressed: () async {
-              print("draw");
-            },
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: height * 0.01),
-            child: FloatingActionButton(
-              heroTag: "picture",
-              child: const Icon(Icons.image),
-              onPressed: () async {
-                print("picture");
-              },
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: height * 0.01),
-            child: FloatingActionButton(
-              heroTag: "hand",
-              child: const Icon(Icons.pan_tool),
-              onPressed: () async {
-                print("hand");
-              },
-            ),
-          ),
-        ],
+        ],),
       )
     );
   }

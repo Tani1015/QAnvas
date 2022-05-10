@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "519067245366",
+    "project_id": "qanvas-edc92",
+    "storage_bucket": "qanvas-edc92.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519067245366:android:b888193161366b76e6f197",
+        "android_client_info": {
+          "package_name": "negimiso.qanvas.qanvas"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "519067245366-q4cpa8q3e0d08v8bqbeug931jv0rpcpf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdXcd09mSCWvERv-C6f0vpr3Zakfub14k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "519067245366-q4cpa8q3e0d08v8bqbeug931jv0rpcpf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

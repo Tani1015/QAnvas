@@ -321,6 +321,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.6"
+  flutter_painter:
+    dependency: "direct main"
+    description:
+      name: flutter_painter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   flutter_riverpod:
     dependency: "direct main"
     description:
@@ -335,13 +342,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  flutter_simple_treeview:
-    dependency: "direct main"
-    description:
-      name: flutter_simple_treeview
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.1"
   flutter_tags:
     dependency: "direct main"
     description:

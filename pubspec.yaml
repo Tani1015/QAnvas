@@ -69,6 +69,8 @@ dependencies:
 
   flutter_painter: ^1.0.1
 
+  phosphor_flutter: ^1.4.0
+
 flutter_native_splash:
   image: assets/images/QAnvas_splash2.png
   android: true

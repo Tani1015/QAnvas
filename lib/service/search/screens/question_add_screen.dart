@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qanvas/service/search/models/tag_model.dart';
 import 'package:spring_button/spring_button.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-final questionstateprovider = StateProvider.autoDispose((ref) {
-  return TextEditingController(text: "");
-});
+//クラスインポート
+import '../controller/tag_statenotifier.dart';
+import '../models/tag_state.dart';
 
 class QuestionAddScreen extends StatefulHookConsumerWidget {
   const QuestionAddScreen({Key? key}) : super(key: key);
@@ -18,49 +17,22 @@ class QuestionAddScreen extends StatefulHookConsumerWidget {
   QuestionAddState createState() => QuestionAddState();
 }
 
-class QuestionAddState extends ConsumerState<QuestionAddScreen> {
+class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTickerProviderStateMixin{
   //ぺインター設定
   static const Color black = Colors.black;
   FocusNode textFocusNode = FocusNode();
   Paint shapePaint = Paint()
     ..strokeWidth = 2
-    ..color = Colors.red
+    ..color = Colors.black
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round;
   late PainterController controller;
-
-  @override
-  void initState() {
-    super.initState();
-    controller = PainterController(
-        settings: PainterSettings(
-
-            //テキスト設定
-            text: TextSettings(
-                focusNode: textFocusNode,
-                textStyle: const TextStyle(color: Colors.black, fontSize: 16)),
-
-            //freestyle 設定
-            freeStyle:
-                const FreeStyleSettings(color: Colors.red, strokeWidth: 2),
-
-            //ペイント設定
-            shape: ShapeSettings(paint: shapePaint),
-
-            //scale 設定
-            scale: const ScaleSettings(
-              enabled: true,
-              minScale: 1,
-              maxScale: 5,
-            )));
-
-    textFocusNode.addListener(onFocus);
-  }
 
   void onFocus() {
     setState(() {});
   }
 
+  //factory of bottomnavigation icon
   static IconData getShapeIcon(ShapeFactory? shapeFactory) {
     if (shapeFactory is LineFactory) return PhosphorIcons.lineSegment;
     if (shapeFactory is ArrowFactory) return PhosphorIcons.arrowUpRight;
@@ -73,156 +45,175 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    controller = PainterController(
+        settings: PainterSettings(
+
+          //テキスト設定
+            text: TextSettings(
+                focusNode: textFocusNode,
+                textStyle: const TextStyle(color: Colors.black, fontSize: 16)),
+
+            //freestyle 設定
+            freeStyle:
+            const FreeStyleSettings(color: Colors.black, strokeWidth: 2),
+
+            //ペイント設定
+            shape: ShapeSettings(paint: shapePaint),
+
+            //scale 設定
+            scale: const ScaleSettings(
+              enabled: true,
+              minScale: 1,
+              maxScale: 5,
+            )));
+    textFocusNode.addListener(onFocus);
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     final textheight = MediaQuery.of(context).viewInsets.bottom;
 
-    //プロバイダー
-    final questionController = ref.watch(questionstateprovider);
-
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        title: SizedBox(
-          width: weight * 0.4,
-          height: height * 0.07,
-          child: Image.asset("assets/images/QAnvas_title.png"),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
-        foregroundColor: Colors.black,
-        actions: [
-          SizedBox(
-            width: weight * 0.25,
-            child: SpringButton(
-              SpringButtonType.WithOpacity,
-              Padding(
-                padding: const EdgeInsets.all(12.5),
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      '投稿する',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 12.5,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(height * 0.08),
+        child: AppBar(
+          title: SizedBox(
+            width: weight * 0.4,
+            height: height * 0.07,
+            child: Image.asset("assets/images/QAnvas_title.png"),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
+          foregroundColor: Colors.black,
+          actions: [
+            SizedBox(
+              width: weight * 0.25,
+              child: SpringButton(
+                SpringButtonType.WithOpacity,
+                Padding(
+                  padding: const EdgeInsets.all(12.5),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        '投稿する',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
+                onTap: () {
+                  context.go('/QuestionAdd/AddTag');
+                },
               ),
-              onTap: () {
-                //ボトムシート
-                showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius:
-                            BorderRadius.vertical(top: Radius.circular(25))),
-                    builder: (BuildContext context) {
-                      return SizedBox(
-                        height: height * 0.7,
-                        child: Column(
-                          children: const <Widget>[],
-                        ),
-                      );
-                    });
-              },
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
-      body: Column(
-        children: <Widget>[
-          ValueListenableBuilder<PainterControllerValue>(
-              valueListenable: controller,
-              builder: (context, _, child) {
-                return Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      SizedBox(
-                          height: height * 0.1,
-                          width: weight * 0.2,
-                          child: IconButton(
-                            splashColor: Colors.white,
-                            highlightColor: Colors.white,
-                            onPressed: () {
-                              controller.selectedObjectDrawable == null
-                                  ? null
-                                  : removeSelectedDrawable();
-                            },
-                            icon: const Icon(Icons.delete),
-                          )),
-                      SizedBox(
-                          height: height * 0.1,
-                          width: weight * 0.2,
-                          child: IconButton(
-                            splashColor: Colors.white,
-                            highlightColor: Colors.white,
-                            tooltip: "画像反転",
-                            onPressed: () {
-                              controller.selectedObjectDrawable != null &&
-                                      controller.selectedObjectDrawable
-                                          is ImageDrawable
-                                  ? flipSelectedImageDrawable()
-                                  : null;
-                            },
-                            icon: const Icon(Icons.flip),
-                          )),
-                      SizedBox(
-                          height: height * 0.1,
-                          width: weight * 0.2,
-                          child: IconButton(
-                            splashColor: Colors.white,
-                            highlightColor: Colors.white,
-                            onPressed: controller.canUndo ? undo : null,
-                            icon: const Icon(Icons.undo),
-                          )),
-                      SizedBox(
-                          height: height * 0.1,
-                          width: weight * 0.2,
-                          child: IconButton(
-                            splashColor: Colors.white,
-                            highlightColor: Colors.white,
-                            onPressed: controller.canRedo ? redo : null,
-                            icon: const Icon(Icons.redo),
-                          ))
-                    ]);
-              }),
-          Center(
-              child: Container(
-                  margin: EdgeInsets.all(weight * 0.01),
-                  width: weight * 0.93,
-                  height: height * 0.7 - textheight * 0.9,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.black),
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: <Widget>[
-                      FlutterPainter(
-                          controller: controller
+      body: SingleChildScrollView(
+        reverse: true,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: textheight * 0.8),
+          child: Column(
+              children: <Widget>[
+                ValueListenableBuilder<PainterControllerValue>(
+                    valueListenable: controller,
+                    builder: (context, _, child) {
+                      return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            SizedBox(
+                                height: height * 0.1,
+                                width: weight * 0.2,
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.white,
+                                  onPressed: () {
+                                    controller.selectedObjectDrawable == null
+                                        ? null
+                                        : removeSelectedDrawable();
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                )),
+                            SizedBox(
+                                height: height * 0.1,
+                                width: weight * 0.2,
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.white,
+                                  tooltip: "画像反転",
+                                  onPressed: () {
+                                    controller.selectedObjectDrawable != null &&
+                                        controller.selectedObjectDrawable
+                                        is ImageDrawable
+                                        ? flipSelectedImageDrawable()
+                                        : null;
+                                  },
+                                  icon: const Icon(Icons.flip),
+                                )),
+                            SizedBox(
+                                height: height * 0.1,
+                                width: weight * 0.2,
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.white,
+                                  onPressed: controller.canUndo ? undo : null,
+                                  icon: const Icon(Icons.undo),
+                                )),
+                            SizedBox(
+                                height: height * 0.1,
+                                width: weight * 0.2,
+                                child: IconButton(
+                                  splashColor: Colors.white,
+                                  highlightColor: Colors.white,
+                                  onPressed: controller.canRedo ? redo : null,
+                                  icon: const Icon(Icons.redo),
+                                ))
+                          ]);
+                    }),
+                Center(
+                    child: Container(
+                      margin: EdgeInsets.all(weight * 0.01),
+                      width: weight * 0.93,
+                      height: height * 0.7 - textheight * 0.8,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(6),
                       ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        left: 0,
-                        child: ValueListenableBuilder(
-                          valueListenable: controller,
-                          builder: (context, _ , __) => Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                  child: Container(
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: <Widget>[
+                          FlutterPainter(
+                              controller: controller
+                          ),
+                          Positioned(
+                            bottom: 0,
+                            right: 0,
+                            left: 0,
+                            child: ValueListenableBuilder(
+                              valueListenable: controller,
+                              builder: (context, _ , __) => Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Container(
                                       constraints: const BoxConstraints(
                                         maxWidth: 400,
                                       ),
@@ -236,7 +227,7 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
                                             if (controller.freeStyleMode != FreeStyleMode.none) ...[
-                                            // Control free style stroke width
+                                              // Control free style stroke width
                                               Row(
                                                 children: [
                                                   const Expanded(flex: 1, child: Text("太さ")),
@@ -252,62 +243,62 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
                                               ),
                                               if (controller.freeStyleMode == FreeStyleMode.draw)
 
+                                                Row(
+                                                  children: [
+                                                    const Expanded(
+                                                        flex: 1, child: Text("色")),
+                                                    // Control free style color hue
+                                                    Expanded(
+                                                      flex: 8,
+                                                      child: Slider.adaptive(
+                                                          min: 0,
+                                                          max: 359.99,
+                                                          value: HSVColor.fromColor(controller.freeStyleColor).hue,
+                                                          activeColor: controller.freeStyleColor, onChanged: setFreeStyleColor),
+                                                    ),
+                                                  ],
+                                                ),
+                                            ],
+                                            if (textFocusNode.hasFocus) ...[
                                               Row(
                                                 children: [
                                                   const Expanded(
-                                                      flex: 1, child: Text("色")),
-                                                  // Control free style color hue
+                                                      flex: 2, child: Text("サイズ")),
+                                                  Expanded(
+                                                    flex: 8,
+                                                    child: Slider.adaptive(
+                                                        min: 8,
+                                                        max: 96,
+                                                        value:
+                                                        controller.textStyle.fontSize ?? 14,
+                                                        onChanged: setTextFontSize),
+                                                  ),
+                                                ],
+                                              ),
+                                              // Control text color hue
+                                              Row(
+                                                children: [
+                                                  const Expanded(flex: 2, child: Text("色")),
                                                   Expanded(
                                                     flex: 8,
                                                     child: Slider.adaptive(
                                                         min: 0,
                                                         max: 359.99,
-                                                        value: HSVColor.fromColor(controller.freeStyleColor).hue,
-                                                        activeColor: controller.freeStyleColor, onChanged: setFreeStyleColor),
+                                                        value: HSVColor.fromColor(
+                                                            controller.textStyle.color ?? black).hue,
+                                                        activeColor: controller.textStyle.color,
+                                                        onChanged: setTextColor),
                                                   ),
                                                 ],
                                               ),
                                             ],
-                                            if (textFocusNode.hasFocus) ...[
-                                            Row(
-                                              children: [
-                                                const Expanded(
-                                                    flex: 1, child: Text("サイズ")),
-                                                Expanded(
-                                                  flex: 8,
-                                                  child: Slider.adaptive(
-                                                      min: 8,
-                                                      max: 96,
-                                                      value:
-                                                      controller.textStyle.fontSize ?? 14,
-                                                      onChanged: setTextFontSize),
-                                                ),
-                                              ],
-                                            ),
-                                            // Control text color hue
-                                            Row(
-                                              children: [
-                                                const Expanded(flex: 1, child: Text("色")),
-                                                Expanded(
-                                                  flex: 8,
-                                                  child: Slider.adaptive(
-                                                      min: 0,
-                                                      max: 359.99,
-                                                      value: HSVColor.fromColor(
-                                                          controller.textStyle.color ?? black).hue,
-                                                      activeColor: controller.textStyle.color,
-                                                      onChanged: setTextColor),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                          if (controller.shapeFactory != null) ...[
-                                              const Text("Shape Settings"),
+                                            if (controller.shapeFactory != null) ...[
+                                              const Text(""),
                                               // Control text color hue
                                               Row(
                                                 children: [
                                                   const Expanded(
-                                                      flex: 1, child: Text("Stroke Width")),
+                                                      flex: 1, child: Text("太さ")),
                                                   Expanded(
                                                     flex: 3,
                                                     child: Slider.adaptive(
@@ -325,7 +316,7 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
                                               // Control shape color hue
                                               Row(
                                                 children: [
-                                                  const Expanded(flex: 1, child: Text("Color")),
+                                                  const Expanded(flex: 1, child: Text("色")),
                                                   Expanded(
                                                     flex: 3,
                                                     child: Slider.adaptive(
@@ -344,7 +335,7 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
                                               Row(
                                                 children: [
                                                   const Expanded(
-                                                      flex: 1, child: Text("Fill shape")),
+                                                      flex: 1, child: Text("塗る")),
                                                   Expanded(
                                                     flex: 3,
                                                     child: Center(
@@ -366,17 +357,19 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
                                             ],
                                           ]
                                       ),
-                                  ),
-                              )
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-              )
-          )
-        ]
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    )
+                ),
+              ]
+          ),
+        ),
       ),
       bottomNavigationBar: ValueListenableBuilder(
         valueListenable: controller,
@@ -467,11 +460,6 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> {
           ],
         ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: (){
-      //     print(controller.drawables);
-      //   },
-      // ),
     );
   }
 

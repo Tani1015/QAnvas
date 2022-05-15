@@ -11,11 +11,8 @@ part 'tag_state.g.dart';
 abstract class TagState with _$TagState {
   @JsonSerializable(explicitToJson: true)
   const factory TagState({
-    @Default(<TagModel>[]) List<TagModel> tags,
-    @Default(<TagModel>[]) List<TagModel> selectTags,
-  }) = _$TagStateData;
-
-  const factory TagState.loading() = TagStateLoading;
+    @Default(<TagModel>[]) List<TagModel> tagList,
+  }) = _TagState;
 
   factory TagState.fromJson(Map<String, dynamic> json) =>
       _$TagStateFromJson(json);

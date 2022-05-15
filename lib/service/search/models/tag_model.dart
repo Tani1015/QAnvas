@@ -1,5 +1,8 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+//クラスインポート
+import '../models/tag_model.dart';
 
 part 'tag_model.freezed.dart';
 part 'tag_model.g.dart';

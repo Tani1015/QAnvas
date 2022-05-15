@@ -218,6 +218,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  filter_list:
+    dependency: "direct main"
+    description:
+      name: filter_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -342,13 +349,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.1"
-  flutter_tags:
-    dependency: "direct main"
-    description:
-      name: flutter_tags
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.9+1"
   flutter_test:
     dependency: "direct dev"
     description: flutter

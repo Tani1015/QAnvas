@@ -15,67 +15,24 @@ final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 TagState _$TagStateFromJson(Map<String, dynamic> json) {
-  switch (json['runtimeType']) {
-    case 'default':
-      return _$TagStateData.fromJson(json);
-    case 'loading':
-      return TagStateLoading.fromJson(json);
-
-    default:
-      throw CheckedFromJsonException(json, 'runtimeType', 'TagState',
-          'Invalid union type "${json['runtimeType']}"!');
-  }
+  return _TagState.fromJson(json);
 }
 
 /// @nodoc
 mixin _$TagState {
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags) $default, {
-    required TResult Function() loading,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_$TagStateData value) $default, {
-    required TResult Function(TagStateLoading value) loading,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-  }) =>
-      throw _privateConstructorUsedError;
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-    required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  List<TagModel> get tagList => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $TagStateCopyWith<TagState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $TagStateCopyWith<$Res> {
   factory $TagStateCopyWith(TagState value, $Res Function(TagState) then) =
       _$TagStateCopyWithImpl<$Res>;
+  $Res call({List<TagModel> tagList});
 }
 
 /// @nodoc
@@ -85,39 +42,45 @@ class _$TagStateCopyWithImpl<$Res> implements $TagStateCopyWith<$Res> {
   final TagState _value;
   // ignore: unused_field
   final $Res Function(TagState) _then;
-}
-
-/// @nodoc
-abstract class _$$TagStateDataCopyWith<$Res> {
-  factory _$$TagStateDataCopyWith(
-          _$TagStateData value, $Res Function(_$TagStateData) then) =
-      __$$TagStateDataCopyWithImpl<$Res>;
-  $Res call({List<TagModel> tags, List<TagModel> selectTags});
-}
-
-/// @nodoc
-class __$$TagStateDataCopyWithImpl<$Res> extends _$TagStateCopyWithImpl<$Res>
-    implements _$$TagStateDataCopyWith<$Res> {
-  __$$TagStateDataCopyWithImpl(
-      _$TagStateData _value, $Res Function(_$TagStateData) _then)
-      : super(_value, (v) => _then(v as _$TagStateData));
-
-  @override
-  _$TagStateData get _value => super._value as _$TagStateData;
 
   @override
   $Res call({
-    Object? tags = freezed,
-    Object? selectTags = freezed,
+    Object? tagList = freezed,
   }) {
-    return _then(_$TagStateData(
-      tags: tags == freezed
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
+    return _then(_value.copyWith(
+      tagList: tagList == freezed
+          ? _value.tagList
+          : tagList // ignore: cast_nullable_to_non_nullable
               as List<TagModel>,
-      selectTags: selectTags == freezed
-          ? _value.selectTags
-          : selectTags // ignore: cast_nullable_to_non_nullable
+    ));
+  }
+}
+
+/// @nodoc
+abstract class _$TagStateCopyWith<$Res> implements $TagStateCopyWith<$Res> {
+  factory _$TagStateCopyWith(_TagState value, $Res Function(_TagState) then) =
+      __$TagStateCopyWithImpl<$Res>;
+  @override
+  $Res call({List<TagModel> tagList});
+}
+
+/// @nodoc
+class __$TagStateCopyWithImpl<$Res> extends _$TagStateCopyWithImpl<$Res>
+    implements _$TagStateCopyWith<$Res> {
+  __$TagStateCopyWithImpl(_TagState _value, $Res Function(_TagState) _then)
+      : super(_value, (v) => _then(v as _TagState));
+
+  @override
+  _TagState get _value => super._value as _TagState;
+
+  @override
+  $Res call({
+    Object? tagList = freezed,
+  }) {
+    return _then(_TagState(
+      tagList: tagList == freezed
+          ? _value.tagList
+          : tagList // ignore: cast_nullable_to_non_nullable
               as List<TagModel>,
     ));
   }
@@ -126,40 +89,24 @@ class __$$TagStateDataCopyWithImpl<$Res> extends _$TagStateCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$_$TagStateData with DiagnosticableTreeMixin implements _$TagStateData {
-  const _$_$TagStateData(
-      {final List<TagModel> tags = const <TagModel>[],
-      final List<TagModel> selectTags = const <TagModel>[],
-      final String? $type})
-      : _tags = tags,
-        _selectTags = selectTags,
-        $type = $type ?? 'default';
+class _$_TagState with DiagnosticableTreeMixin implements _TagState {
+  const _$_TagState({final List<TagModel> tagList = const <TagModel>[]})
+      : _tagList = tagList;
 
-  factory _$_$TagStateData.fromJson(Map<String, dynamic> json) =>
-      _$$_$TagStateDataFromJson(json);
+  factory _$_TagState.fromJson(Map<String, dynamic> json) =>
+      _$$_TagStateFromJson(json);
 
-  final List<TagModel> _tags;
+  final List<TagModel> _tagList;
   @override
   @JsonKey()
-  List<TagModel> get tags {
+  List<TagModel> get tagList {
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_tags);
+    return EqualUnmodifiableListView(_tagList);
   }
-
-  final List<TagModel> _selectTags;
-  @override
-  @JsonKey()
-  List<TagModel> get selectTags {
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_selectTags);
-  }
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TagState(tags: $tags, selectTags: $selectTags)';
+    return 'TagState(tagList: $tagList)';
   }
 
   @override
@@ -167,242 +114,42 @@ class _$_$TagStateData with DiagnosticableTreeMixin implements _$TagStateData {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'TagState'))
-      ..add(DiagnosticsProperty('tags', tags))
-      ..add(DiagnosticsProperty('selectTags', selectTags));
+      ..add(DiagnosticsProperty('tagList', tagList));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$TagStateData &&
-            const DeepCollectionEquality().equals(other.tags, tags) &&
-            const DeepCollectionEquality()
-                .equals(other.selectTags, selectTags));
+            other is _TagState &&
+            const DeepCollectionEquality().equals(other.tagList, tagList));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(tags),
-      const DeepCollectionEquality().hash(selectTags));
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(tagList));
 
   @JsonKey(ignore: true)
   @override
-  _$$TagStateDataCopyWith<_$TagStateData> get copyWith =>
-      __$$TagStateDataCopyWithImpl<_$TagStateData>(this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags) $default, {
-    required TResult Function() loading,
-  }) {
-    return $default(tags, selectTags);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-  }) {
-    return $default?.call(tags, selectTags);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(tags, selectTags);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_$TagStateData value) $default, {
-    required TResult Function(TagStateLoading value) loading,
-  }) {
-    return $default(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-  }) {
-    return $default?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-    required TResult orElse(),
-  }) {
-    if ($default != null) {
-      return $default(this);
-    }
-    return orElse();
-  }
+  _$TagStateCopyWith<_TagState> get copyWith =>
+      __$TagStateCopyWithImpl<_TagState>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_$TagStateDataToJson(this);
+    return _$$_TagStateToJson(this);
   }
 }
 
-abstract class _$TagStateData implements TagState {
-  const factory _$TagStateData(
-      {final List<TagModel> tags,
-      final List<TagModel> selectTags}) = _$_$TagStateData;
+abstract class _TagState implements TagState {
+  const factory _TagState({final List<TagModel> tagList}) = _$_TagState;
 
-  factory _$TagStateData.fromJson(Map<String, dynamic> json) =
-      _$_$TagStateData.fromJson;
+  factory _TagState.fromJson(Map<String, dynamic> json) = _$_TagState.fromJson;
 
-  List<TagModel> get tags => throw _privateConstructorUsedError;
-  List<TagModel> get selectTags => throw _privateConstructorUsedError;
+  @override
+  List<TagModel> get tagList => throw _privateConstructorUsedError;
+  @override
   @JsonKey(ignore: true)
-  _$$TagStateDataCopyWith<_$TagStateData> get copyWith =>
+  _$TagStateCopyWith<_TagState> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $TagStateLoadingCopyWith<$Res> {
-  factory $TagStateLoadingCopyWith(
-          TagStateLoading value, $Res Function(TagStateLoading) then) =
-      _$TagStateLoadingCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class _$TagStateLoadingCopyWithImpl<$Res> extends _$TagStateCopyWithImpl<$Res>
-    implements $TagStateLoadingCopyWith<$Res> {
-  _$TagStateLoadingCopyWithImpl(
-      TagStateLoading _value, $Res Function(TagStateLoading) _then)
-      : super(_value, (v) => _then(v as TagStateLoading));
-
-  @override
-  TagStateLoading get _value => super._value as TagStateLoading;
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$TagStateLoading
-    with DiagnosticableTreeMixin
-    implements TagStateLoading {
-  const _$TagStateLoading({final String? $type}) : $type = $type ?? 'loading';
-
-  factory _$TagStateLoading.fromJson(Map<String, dynamic> json) =>
-      _$$TagStateLoadingFromJson(json);
-
-  @JsonKey(name: 'runtimeType')
-  final String $type;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'TagState.loading()';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty('type', 'TagState.loading'));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is TagStateLoading);
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags) $default, {
-    required TResult Function() loading,
-  }) {
-    return loading();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-  }) {
-    return loading?.call();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>(
-    TResult Function(List<TagModel> tags, List<TagModel> selectTags)?
-        $default, {
-    TResult Function()? loading,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading();
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>(
-    TResult Function(_$TagStateData value) $default, {
-    required TResult Function(TagStateLoading value) loading,
-  }) {
-    return loading(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-  }) {
-    return loading?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>(
-    TResult Function(_$TagStateData value)? $default, {
-    TResult Function(TagStateLoading value)? loading,
-    required TResult orElse(),
-  }) {
-    if (loading != null) {
-      return loading(this);
-    }
-    return orElse();
-  }
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$TagStateLoadingToJson(this);
-  }
-}
-
-abstract class TagStateLoading implements TagState {
-  const factory TagStateLoading() = _$TagStateLoading;
-
-  factory TagStateLoading.fromJson(Map<String, dynamic> json) =
-      _$TagStateLoading.fromJson;
 }

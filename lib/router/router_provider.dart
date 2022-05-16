@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 //クラスインポート
 import 'package:qanvas/router/bottom_route.dart';
-import 'package:qanvas/service/search/screens/question_add_screen.dart';
-import 'package:qanvas/service/search/screens/add_tag_screen.dart';
+import 'package:qanvas/service/search/screens/add_question_note_screen.dart';
+import 'package:qanvas/service/search/screens/add_question_screen.dart';
 
 final Router_Provider = Provider(
     (ref) => GoRouter(
@@ -19,17 +19,17 @@ final Router_Provider = Provider(
               ),
             routes: [
               GoRoute(
-                  path: 'QuestionAdd',
+                  path: 'AddQuestion',
                   pageBuilder: (BuildContext context, GoRouterState state) => const MaterialPage(
-                      child: QuestionAddScreen()
+                      child: AddQuestionScreen()
                   ),
                   routes: [
                     GoRoute(
-                        path: 'AddTag',
-                        pageBuilder: (BuildContext context, GoRouterState state) => const MaterialPage(
-                            child: FilterPage()
-                        )
-                    ),
+                      path: 'AddQuestionNote',
+                      pageBuilder: (BuildContext context, GoRouterState state) => const MaterialPage(
+                        child: AddQuestionNoteScreen()
+                      ),
+                    )
                   ]
               ),
             ]

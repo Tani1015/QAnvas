@@ -69,7 +69,7 @@ dependencies:
 
   phosphor_flutter: ^1.4.0
 
-  filter_list: ^1.0.1
+
 
 flutter_native_splash:
   image: assets/images/QAnvas_splash2.png

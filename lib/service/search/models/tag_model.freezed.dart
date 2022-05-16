@@ -98,16 +98,19 @@ class __$TagModelCopyWithImpl<$Res> extends _$TagModelCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_TagModel with DiagnosticableTreeMixin implements _TagModel {
-  const _$_TagModel({required this.id, required this.title});
+  const _$_TagModel({this.id = "", this.title = ""});
 
   factory _$_TagModel.fromJson(Map<String, dynamic> json) =>
       _$$_TagModelFromJson(json);
 
   @override
+  @JsonKey()
   final String id;
   @override
+  @JsonKey()
   final String title;
 
   @override
@@ -152,8 +155,7 @@ class _$_TagModel with DiagnosticableTreeMixin implements _TagModel {
 }
 
 abstract class _TagModel implements TagModel {
-  const factory _TagModel(
-      {required final String id, required final String title}) = _$_TagModel;
+  const factory _TagModel({final String id, final String title}) = _$_TagModel;
 
   factory _TagModel.fromJson(Map<String, dynamic> json) = _$_TagModel.fromJson;
 

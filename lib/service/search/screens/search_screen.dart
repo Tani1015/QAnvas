@@ -46,15 +46,18 @@ class SearchScreen extends HookConsumerWidget{
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
-      appBar: AppBar(
-        title: SizedBox(
-          width: weight * 0.4,
-          height: height * 0.07,
-          child: Image.asset("assets/images/QAnvas_title.png"),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(height * 0.08),
+        child:  AppBar(
+          title: SizedBox(
+            width: weight * 0.4,
+            height: height * 0.07,
+            child: Image.asset("assets/images/QAnvas_title.png"),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          elevation: 0,
         ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        elevation: 0,
       ),
       body: GestureDetector(
         onTap: (){
@@ -66,7 +69,6 @@ class SearchScreen extends HookConsumerWidget{
         child:SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(height:  height * 0.048),
               //サーチテキストフィールド
               Container(
                 width: weight * 0.95,
@@ -105,8 +107,12 @@ class SearchScreen extends HookConsumerWidget{
               ),
               Container(
                 alignment: Alignment.topLeft,
-                margin: EdgeInsets.all(weight * 0.02),
-                child:  const Text("カテゴリー"),
+                margin: EdgeInsets.only(left: weight * 0.02, top: height * 0.01,bottom: height * 0.005),
+                child:  const Text("カテゴリー",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
               ),
               ListView.separated(
                   shrinkWrap: true,
@@ -146,7 +152,7 @@ class SearchScreen extends HookConsumerWidget{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          GoRouter.of(context).go('/QuestionAdd');
+          GoRouter.of(context).go('/AddQuestion');
         },
         label:  const Text("質問する"),
         backgroundColor: Colors.red,

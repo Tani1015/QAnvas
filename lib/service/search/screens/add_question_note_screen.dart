@@ -1,23 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:qanvas/service/search/models/tag_model.dart';
 import 'package:spring_button/spring_button.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
-//クラスインポート
-import '../controller/tag_statenotifier.dart';
-import '../models/tag_state.dart';
-
-class QuestionAddScreen extends StatefulHookConsumerWidget {
-  const QuestionAddScreen({Key? key}) : super(key: key);
+class AddQuestionNoteScreen extends StatefulHookConsumerWidget {
+  const AddQuestionNoteScreen({Key? key}) : super(key: key);
 
   @override
-  QuestionAddState createState() => QuestionAddState();
+  AddQuestionNoteState createState() => AddQuestionNoteState();
 }
 
-class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTickerProviderStateMixin{
+class AddQuestionNoteState extends ConsumerState<AddQuestionNoteScreen> with SingleTickerProviderStateMixin{
   //ぺインター設定
   static const Color black = Colors.black;
   FocusNode textFocusNode = FocusNode();
@@ -113,14 +108,14 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTicke
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.5,
+                          fontSize: 13,
                         ),
                       ),
                     ),
                   ),
                 ),
                 onTap: () {
-                  context.go('/QuestionAdd/AddTag');
+                  context.go("投稿する");
                 },
               ),
             )
@@ -130,7 +125,7 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTicke
       body: SingleChildScrollView(
         reverse: true,
         child: Padding(
-          padding: EdgeInsets.only(bottom: textheight * 0.8),
+          padding: EdgeInsets.only(bottom: textheight),
           child: Column(
               children: <Widget>[
                 ValueListenableBuilder<PainterControllerValue>(
@@ -190,13 +185,9 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTicke
                     }),
                 Center(
                     child: Container(
-                      margin: EdgeInsets.all(weight * 0.01),
-                      width: weight * 0.93,
+                      color: Colors.grey.shade200,
+                      width: weight,
                       height: height * 0.7 - textheight * 0.8,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.black),
-                        borderRadius: BorderRadius.circular(6),
-                      ),
                       child: Stack(
                         clipBehavior: Clip.none,
                         children: <Widget>[
@@ -321,7 +312,7 @@ class QuestionAddState extends ConsumerState<QuestionAddScreen> with SingleTicke
                                                     flex: 3,
                                                     child: Slider.adaptive(
                                                         min: 0,
-                                                        max: 359.99,
+                                                        max: 360,
                                                         value: HSVColor.fromColor(
                                                             (controller.shapePaint ?? shapePaint).color).hue,
                                                         activeColor: (controller.shapePaint ?? shapePaint).color,

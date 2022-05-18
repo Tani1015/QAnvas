@@ -115,7 +115,7 @@ class AddQuestionNoteState extends ConsumerState<AddQuestionNoteScreen> with Sin
                   ),
                 ),
                 onTap: () {
-                  context.go("投稿する");
+                  context.go("/");
                 },
               ),
             )

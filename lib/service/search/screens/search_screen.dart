@@ -128,7 +128,7 @@ class SearchScreen extends HookConsumerWidget{
                       ),
                       title: Text(categorylist[index],
                         style: const TextStyle(
-                            fontSize: 20
+                            fontSize: 20,
                         ),
                       ),
                       onTap: (){

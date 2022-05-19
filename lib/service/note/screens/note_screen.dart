@@ -56,10 +56,10 @@ class NoteScreen extends HookConsumerWidget{
             SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: EdgeInsets.only(left: weight * 0.02,bottom: height * 0.01),
-                child: const Text("ノート",
+                padding: EdgeInsets.only(left: weight * 0.05,bottom: height * 0.01),
+                child: Text(Hive.box("Folder").get('Folder')[folderIndex],
                   textAlign: TextAlign.start,
-                  style:  TextStyle(
+                  style:  const TextStyle(
                       fontSize: 26,
                       fontWeight: FontWeight.bold
                   ),
@@ -67,13 +67,25 @@ class NoteScreen extends HookConsumerWidget{
               ),
             ),
             const Divider(color: Colors.black,
-              height: 0.5,
+              height: 1,
             ),
             ValueListenableBuilder(
                 valueListenable: Hive.box("Note").listenable(keys:[noteKey]),
                 builder: (context, box,widget){
-                  return Hive.box("Note").get(noteKey) == null
-                    ? Container()
+                  return Hive.box("Note").get(noteKey).isEmpty == true
+                    ? Column(
+                      children: [
+                        SizedBox(
+                          height: height * 0.5,
+                          child: Padding(
+                            padding: EdgeInsets.only(top: height * 0.1),
+                            child: Image.asset("assets/images/QAnvas_logo.png"),
+                          ),
+                        ),
+                        SizedBox(height: height * 0.03),
+                        const Text("ノートを追加してください!!")
+                      ],
+                    )
                     : ListView.separated(
                         shrinkWrap: true,
                         itemCount: Hive.box("Note").get(noteKey).length,
@@ -86,7 +98,7 @@ class NoteScreen extends HookConsumerWidget{
                                   Hive.box("Note").get(noteKey)[index],
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 23,
                                   ),
                                 ),
                               ),
@@ -129,11 +141,12 @@ class NoteScreen extends HookConsumerWidget{
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          noteNotifier.addNote("sample2");
-          Hive.box("Note").put(noteKey, noteNotifier.state);
+          context.go("/Note/$index/MakeNote/$index");
         },
+        label:  const Text("ノートを作る"),
+        backgroundColor: Colors.red,
       ),
     );
   }

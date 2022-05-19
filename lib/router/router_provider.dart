@@ -8,6 +8,7 @@ import 'package:qanvas/service/note/screens/folder_screen.dart';
 import 'package:qanvas/service/note/screens/note_screen.dart';
 import 'package:qanvas/service/search/screens/add_question_note_screen.dart';
 import 'package:qanvas/service/search/screens/add_question_screen.dart';
+import 'package:qanvas/service/note/screens/make_note_screen.dart';
 
 final Router_Provider = Provider(
     (ref) => GoRouter(
@@ -43,7 +44,20 @@ final Router_Provider = Provider(
                    key: state.pageKey,
                    child:  NoteScreen(index: '$index')
                  );
-                }
+                },
+                routes: [
+                  GoRoute(
+                      path: 'MakeNote/:fid',
+                      pageBuilder: (BuildContext cotext, GoRouterState state){
+                        final index = state.params['fid'];
+
+                        return MaterialPage(
+                            key: state.pageKey,
+                            child:  MakeNoteScreen(index: '$index')
+                        );
+                      },
+                  )
+                ]
               ),
             ]
           ),

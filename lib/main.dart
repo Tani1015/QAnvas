@@ -17,6 +17,7 @@ Future<List<Box>> _openBox() async{
   //複数のHive Box
   var folderBox = await Hive.openBox("Folder");
   var noteBox = await Hive.openBox("Note");
+  var imageBox = await Hive.openBox("Image");
   return boxlist;
 }
 

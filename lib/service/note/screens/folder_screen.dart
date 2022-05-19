@@ -11,11 +11,16 @@ final folderProvider = StateNotifierProvider<FolderState,List<String>>( (ref)
   => FolderState()
 );
 
-class FolderScreen extends HookConsumerWidget{
+class FolderScreen extends StatefulHookConsumerWidget {
   const FolderScreen({Key? key}) : super(key: key);
+  @override
+  FolderScreenState createState() => FolderScreenState();
+}
+
+class FolderScreenState extends ConsumerState<FolderScreen>{
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
@@ -24,6 +29,8 @@ class FolderScreen extends HookConsumerWidget{
     final folderNotifier = ref.read(folderProvider.notifier);
 
     final TextEditingController folderName = TextEditingController();
+    bool _validate = false;
+    List<String> newlist = [];
 
 
     return Scaffold(
@@ -40,54 +47,6 @@ class FolderScreen extends HookConsumerWidget{
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                         title: const Text("フォルダーを追加"),
-                         content: TextField(
-                           decoration: const InputDecoration(hintText: "入力してください"),
-                           controller: folderName,
-                         ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text('キャンセル',
-                                style: TextStyle(
-                                  color: Colors.blue
-                                ),
-                              ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
-                              ),
-                            ),
-                            TextButton(
-                              style:ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
-                              ),
-                              child: const Text('追加',
-                                style: TextStyle(color:  Colors.blue),
-                              ),
-                              onPressed: () {
-                                folderNotifier.addFolder(folderName.text);
-                                Hive.box("Folder").put('Folder', folderNotifier.state);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                  );
-                },
-                color: Colors.black,
-                icon: const Icon(Icons.add)
-            )
-          ],
         ),
       ),
       body: SingleChildScrollView(
@@ -96,8 +55,8 @@ class FolderScreen extends HookConsumerWidget{
             SizedBox(
               width: double.infinity,
               child: Padding(
-                padding: EdgeInsets.only(left: weight * 0.02,bottom: height * 0.01),
-                child: const Text("フォルダー",
+                padding: EdgeInsets.only(left: weight * 0.05,bottom: height * 0.01),
+                child: const Text("フォルダ",
                   textAlign: TextAlign.start,
                   style:  TextStyle(
                     fontSize: 26,
@@ -112,59 +71,62 @@ class FolderScreen extends HookConsumerWidget{
             ValueListenableBuilder(
               valueListenable: Hive.box("Folder").listenable(keys: ['Folder']),
               builder: (context, box, widget){
-                return Hive.box("Folder").get('Folder') == null
-                  ? Container()
-                  : ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: Hive.box("Folder").get('Folder').length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      child: Slidable(
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          title: Text(
-                            Hive.box("Folder").get('Folder')[index],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                        ),
-                        endActionPane: ActionPane(
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context){
-                                  Hive.box("Note").delete(folderNotifier.state[index]);
-                                  folderNotifier.removeFolder(folderNotifier.state[index]);
-                                  Hive.box("Folder").put('Folder', folderNotifier.state);
-                                },
-                                flex: 1,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                                backgroundColor: const Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                              ),
-                              const SlidableAction(
-                                flex: 1,
-                                onPressed: doNothing,
-                                backgroundColor: Color(0xFF21B7CA),
-                                foregroundColor: Colors.white,
-                                icon: Icons.share,
-                                label: 'Share',
-                              ),
-                            ]
+                return Hive.box("Folder").get('Folder').isEmpty == true
+                  ? Column(
+                    children: [
+                      SizedBox(
+                        height: height * 0.5,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: height * 0.1),
+                          child: Image.asset("assets/images/QAnvas_splash2.png"),
                         ),
                       ),
-                      onTap: () {
-                        context.go('/Note/$index');
-                      },
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(height:  0);
-                  },
-                );
+                      const Text("フォルダを追加してください!!")
+                    ],
+                  )
+                  : ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: Hive.box("Folder").get('Folder').length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return GestureDetector(
+                        child: Slidable(
+                          child: ListTile(
+                            tileColor: Colors.white,
+                            title: Text(
+                              Hive.box("Folder").get('Folder')[index],
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                fontSize: 23,
+                              ),
+                            ),
+                          ),
+                          endActionPane: ActionPane(
+                              motion: const DrawerMotion(),
+                              children: [
+                                SlidableAction(
+                                  onPressed: (BuildContext context){
+                                    Hive.box("Note").delete(folderNotifier.state[index]);
+                                    folderNotifier.removeFolder(folderNotifier.state[index]);
+                                    Hive.box("Folder").put('Folder', folderNotifier.state);
+                                  },
+                                  flex: 1,
+                                  icon: Icons.delete,
+                                  label: '削除',
+                                  backgroundColor: const Color(0xFFFE4A49),
+                                  foregroundColor: Colors.white,
+                                ),
+                              ]
+                          ),
+                        ),
+                        onTap: () {
+                          context.go('/Note/$index');
+                        },
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Divider(height:  0);
+                    },
+                  );
               },
             ),
           ],
@@ -172,10 +134,62 @@ class FolderScreen extends HookConsumerWidget{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // GoRouter.of(context).go('/AddQuestion');
-          print(folderNotifier.state);
+          showDialog(
+              context: context,
+              builder: (context) {
+                return StatefulBuilder(
+                    builder: (BuildContext context, StateSetter setState){
+                      return AlertDialog(
+                        title: const Text("フォルダを追加"),
+                        content: TextField(
+                          decoration: InputDecoration(
+                            hintText: "入力してください",
+                            errorText: _validate ? "空白か同じフォルダーがあります" : null,
+                          ),
+                          controller: folderName,
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text('キャンセル',
+                              style: TextStyle(
+                                  color: Colors.blue
+                              ),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                            ),
+                          ),
+                          TextButton(
+                            style:ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                            ),
+                            child: const Text('追加',
+                              style: TextStyle(color:  Colors.blue),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                folderName.text.isEmpty ? _validate = true : Hive.box("Note").containsKey(folderName.text)
+                                    ? _validate = true
+                                    : {
+                                  folderNotifier.addFolder(folderName.text),
+                                  Hive.box("Folder").put('Folder', folderNotifier.state),
+                                  Hive.box("Note").put(folderName.text, newlist),
+                                  Navigator.pop(context)
+                                };
+                              });
+                            },
+                          ),
+                        ],
+                      );
+                    }
+                );
+              }
+          );
         },
-        label:  const Text("ノートを作る"),
+        label:  const Text("フォルダを作る"),
         backgroundColor: Colors.blue,
       ),
     );

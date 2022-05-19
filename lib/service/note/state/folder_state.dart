@@ -1,14 +1,9 @@
 import 'package:state_notifier/state_notifier.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 
-class FolderState extends StateNotifier<List<String>> {
-  FolderState() : super([]);
+class FolderState extends StateNotifier<List<String>>{
+  FolderState() : super(Hive.box("Folder").get('Folder') ?? []);
 
-  @override
-  void initState() {
-    state = Hive.box("Folder").get('Folder');
-  }
 
   void addFolder(String foldername) {
     state = [...state, foldername];

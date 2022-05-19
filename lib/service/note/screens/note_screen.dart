@@ -1,30 +1,37 @@
-import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 //クラスインポート
+import 'package:qanvas/service/note/screens/folder_screen.dart';
 import 'package:qanvas/service/note/state/folder_state.dart';
+import 'package:qanvas/service/note/state/note_state.dart';
 
-final folderProvider = StateNotifierProvider<FolderState,List<String>>( (ref)
-  => FolderState()
-);
+
 
 class NoteScreen extends HookConsumerWidget{
-  const NoteScreen({Key? key}) : super(key: key);
+  const NoteScreen({Key? key, required this.index}) : super(key: key);
+
+  final String? index;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final FolderList = ref.read(folderProvider.notifier);
+    final int folderIndex = int.parse(index!);
+    final noteKey = FolderList.state[folderIndex];
+
+    final NoteProvider = StateNotifierProvider<NoteState,List<String>>(
+            (ref) => NoteState(noteKey)
+    );
+
+    final noteNotifier = ref.read(NoteProvider.notifier);
+    final NoteController = ref.watch(NoteProvider);
+
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-
-    final folderController = ref.watch(folderProvider);
-    final folderNotifier = ref.read(folderProvider.notifier);
-
-    final TextEditingController folderName = TextEditingController();
-
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -40,46 +47,7 @@ class NoteScreen extends HookConsumerWidget{
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0,
-          actions: [
-            IconButton(
-                onPressed: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                         title: const Text("フォルダーを追加"),
-                         content: TextField(
-                           decoration: const InputDecoration(hintText: "入力してください"),
-                           controller: folderName,
-                         ),
-                          actions: <Widget>[
-                            FlatButton(
-                              color: Colors.white,
-                              textColor: Colors.blue,
-                              child: const Text('キャンセル'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                            ),
-                            FlatButton(
-                              color: Colors.white,
-                              textColor: Colors.blue,
-                              child: const Text('追加'),
-                              onPressed: () {
-                                folderNotifier.addFolder(folderName.text);
-                                Hive.box("Folder").put('Folder', folderNotifier.state);
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      }
-                  );
-                },
-                color: Colors.black,
-                icon: const Icon(Icons.add)
-            )
-          ],
+          foregroundColor: Colors.black,
         ),
       ),
       body: SingleChildScrollView(
@@ -89,11 +57,11 @@ class NoteScreen extends HookConsumerWidget{
               width: double.infinity,
               child: Padding(
                 padding: EdgeInsets.only(left: weight * 0.02,bottom: height * 0.01),
-                child: const Text("フォルダー",
+                child: const Text("ノート",
                   textAlign: TextAlign.start,
                   style:  TextStyle(
-                    fontSize: 26,
-                    fontWeight: FontWeight.bold
+                      fontSize: 26,
+                      fontWeight: FontWeight.bold
                   ),
                 ),
               ),
@@ -102,73 +70,73 @@ class NoteScreen extends HookConsumerWidget{
               height: 0.5,
             ),
             ValueListenableBuilder(
-              valueListenable: Hive.box("Folder").listenable(keys: ['Folder']),
-              builder: (context, box, widget){
-                return ListView.separated(
-                  shrinkWrap: true,
-                  itemCount: Hive.box("Folder").get('Folder').length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      child: Slidable(
-                        child: ListTile(
-                          tileColor: Colors.white,
-                          title: Text(
-                            Hive.box("Folder").get('Folder')[index],
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 20,
+                valueListenable: Hive.box("Note").listenable(keys:[noteKey]),
+                builder: (context, box,widget){
+                  return Hive.box("Note").get(noteKey) == null
+                    ? Container()
+                    : ListView.separated(
+                        shrinkWrap: true,
+                        itemCount: Hive.box("Note").get(noteKey).length,
+                        itemBuilder: (BuildContext context, int index){
+                          return GestureDetector(
+                            child: Slidable(
+                              child: ListTile(
+                                tileColor: Colors.white,
+                                title: Text(
+                                  Hive.box("Note").get(noteKey)[index],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
+                              ),
+                              endActionPane: ActionPane(
+                                  motion: const DrawerMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (BuildContext context){
+                                        noteNotifier.removeNote(noteNotifier.state[index]);
+                                        Hive.box("Note").put(noteKey, noteNotifier.state);
+                                      },
+                                      flex: 1,
+                                      icon: Icons.delete,
+                                      label: 'Delete',
+                                      backgroundColor: const Color(0xFFFE4A49),
+                                      foregroundColor: Colors.white,
+                                    ),
+                                    const SlidableAction(
+                                      flex: 1,
+                                      onPressed: doNothing,
+                                      backgroundColor: Color(0xFF21B7CA),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.share,
+                                      label: 'Share',
+                                    ),
+                                  ]
+                              ),
                             ),
-                          ),
-                        ),
-                        endActionPane: ActionPane(
-                            motion: const DrawerMotion(),
-                            children: [
-                              SlidableAction(
-                                onPressed: (BuildContext context){
-                                  folderNotifier.removeFolder(folderNotifier.state[index]);
-                                  Hive.box("Folder").put('Folder', folderNotifier.state);
-                                },
-                                flex: 4,
-                                icon: Icons.delete,
-                                label: 'Delete',
-                                backgroundColor: const Color(0xFFFE4A49),
-                                foregroundColor: Colors.white,
-                              ),
-                              const SlidableAction(
-                                flex: 6,
-                                onPressed: doNothing,
-                                backgroundColor: Color(0xFF21B7CA),
-                                foregroundColor: Colors.white,
-                                icon: Icons.share,
-                                label: 'Share',
-                              ),
-                            ]
-                        ),
-                      ),
-                      onTap: () {
-                        print(index);
-                      },
-                    );
-                  },
-                  separatorBuilder: (BuildContext context, int index) {
-                    return const Divider(height:  0);
-                  },
-                );
-              },
-            ),
+                            onTap: () {
+                              print(Hive.box("Note").get(noteKey)[index]);
+                            },
+                          );
+                        },
+                        separatorBuilder: (BuildContext context, int index) {
+                          return const Divider(height: 0);
+                        },
+                  );
+                }
+            )
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // GoRouter.of(context).go('/AddQuestion');
-          print(Hive.box("Folder").get('Folder'));
+          noteNotifier.addNote("sample2");
+          Hive.box("Note").put(noteKey, noteNotifier.state);
         },
-        label:  const Text("ノートを作る"),
-        backgroundColor: Colors.blue,
       ),
     );
   }
-}
 
-void doNothing(BuildContext context){}
+
+}

@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/service/search/screens/search_screen.dart';
 import 'package:qanvas/service/chat/screens/chat_screen.dart';
 import 'package:qanvas/service/notification/screens/notification_screen.dart';
-import 'package:qanvas/service/note/screens/note_screen.dart';
+import 'package:qanvas/service/note/screens/folder_screen.dart';
 
 final screenTypeProvider = StateProvider<ScreenType>((ref) => ScreenType.Search);
 
@@ -29,7 +29,7 @@ class BottomRoute extends HookConsumerWidget{
       const SearchScreen(),
       const ChatScreen(),
       const NotificationScreen(),
-      const NoteScreen(),
+      const FolderScreen(),
     ];
 
     final tabItems= [

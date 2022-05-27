@@ -4,6 +4,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:spring_button/spring_button.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
+
+//クラスインポート
+import 'package:qanvas/service/note/widgets/render_image_dialog.dart';
 
 class MakeNoteScreen extends StatefulHookConsumerWidget {
   const MakeNoteScreen({Key? key,required this.index}) : super(key: key);
@@ -24,6 +29,7 @@ class MakeNoteState extends ConsumerState<MakeNoteScreen> with SingleTickerProvi
     ..style = PaintingStyle.stroke
     ..strokeCap = StrokeCap.round;
   late PainterController controller;
+  final GlobalKey globalKey = GlobalKey();
 
   void onFocus() {
     setState(() {});
@@ -120,7 +126,7 @@ class MakeNoteState extends ConsumerState<MakeNoteScreen> with SingleTickerProvi
                   ),
                 ),
                 onTap: () {
-                  print(folderIndex);
+                  renderImage();
                   // context.go("/");
                 },
               ),
@@ -129,6 +135,7 @@ class MakeNoteState extends ConsumerState<MakeNoteScreen> with SingleTickerProvi
         ),
       ),
       body: SingleChildScrollView(
+        physics: const NeverScrollableScrollPhysics(),
         reverse: true,
         child: Padding(
           padding: EdgeInsets.only(bottom: textheight),
@@ -198,7 +205,8 @@ class MakeNoteState extends ConsumerState<MakeNoteScreen> with SingleTickerProvi
                         clipBehavior: Clip.none,
                         children: <Widget>[
                           FlutterPainter(
-                              controller: controller
+                            controller: controller,
+                            key:  globalKey,
                           ),
                           Positioned(
                             bottom: 0,
@@ -531,5 +539,15 @@ class MakeNoteState extends ConsumerState<MakeNoteScreen> with SingleTickerProvi
 
     controller.replaceDrawable(
         imageDrawable, imageDrawable.copyWith(flipped: !imageDrawable.flipped));
+  }
+
+  void renderImage() {
+    final imageSize = globalKey.currentContext!.size;
+    final imageFuture = controller.renderImage(imageSize!).then<Uint8List?>((ui.Image image) => image.pngBytes);
+    showDialog(
+      context: context,
+      builder: (context) =>
+          RenderImageDialog(imageFuture: imageFuture)
+    );
   }
 }

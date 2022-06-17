@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 
 //クラスインポート
-import 'package:qanvas/router/router_provider.dart';
+import 'package:qanvas/router/get_routes.dart';
+import 'package:qanvas/services/user/pages/sign_in.dart';
 
 List<Box> boxlist = [];
 
@@ -25,22 +25,17 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await _openBox();
-  runApp(
-    const ProviderScope(
-        child: Myapp()
-    ),
-  );
+  runApp(const Myapp());
 }
 
-class Myapp extends ConsumerWidget{
+class Myapp extends StatelessWidget{
   const Myapp({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final router = ref.watch(Router_Provider);
-    return MaterialApp.router(
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      routeInformationParser: router.routeInformationParser,
-      routerDelegate: router.routerDelegate,
+      getPages: GetRoutes.pages,
+      home: SignInPage(),
     );
   }
 

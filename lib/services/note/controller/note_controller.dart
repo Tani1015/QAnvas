@@ -1,18 +1,10 @@
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:qanvas/services/note/controller/folder_controller.dart';
 
 class NoteController extends GetxController {
-  NoteController(this.keyname);
-  final String? keyname;
-  var noteList;
+  NoteController(this.keyName);
+  final String? keyName;
 
-  @override
-  void onInit() {
-    noteList = Hive.box("Note").get("$keyname");
-    super.onInit();
-  }
-
-  // void removeNote(String noteName){
-  //   noteList?.remove(noteName);
-  // }
+  List? noteList = [];
 }

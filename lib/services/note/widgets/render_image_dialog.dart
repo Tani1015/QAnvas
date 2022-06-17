@@ -18,6 +18,7 @@ class RenderImageDialog extends StatelessWidget{
 
     final TextEditingController noteNameController = TextEditingController();
     final String noteName = Hive.box('Folder').getAt(0)[index];
+    Map<String, dynamic>? folder = Hive.box('Folder').get(noteName);
 
     return AlertDialog(
       content: FutureBuilder<Uint8List?>(
@@ -84,9 +85,11 @@ class RenderImageDialog extends StatelessWidget{
                       Map<String, dynamic> noteMap = {
                         noteNameText: value
                       };
-                      Hive.box('Note').put(noteName, noteMap);
+                      folder!.addAll(noteMap);
+                      print(folder);
+                      // Hive.box('Note').put(noteName, folder!);
                     });
-                    Get.offNamedUntil('/Note', (route) => false,arguments: index);
+                    Get.offNamed('/Note',arguments: index);
                   },
                 ),
               ],

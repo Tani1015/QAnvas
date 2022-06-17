@@ -5,6 +5,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'dart:ui' as ui;
 import 'dart:typed_data';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 //クラスインポート
 import '../widgets/render_image_dialog.dart';
@@ -18,7 +19,7 @@ class MakeNoteScreen extends StatefulWidget {
 
 class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderStateMixin{
   //ぺインター設定
-  final index = Get.arguments;
+  final int? index = Get.arguments;
   static const Color black = Colors.black;
   FocusNode textFocusNode = FocusNode();
   Paint shapePaint = Paint()
@@ -81,6 +82,10 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
     final height = MediaQuery.of(context).size.height;
     final textheight = MediaQuery.of(context).viewInsets.bottom;
 
+    final TextEditingController noteNameController = TextEditingController();
+    final String noteName = Hive.box('Folder').getAt(0)[index!];
+    Future<Uint8List?>? imageFuture;
+
     return Scaffold(
       backgroundColor: Colors.white,
       resizeToAvoidBottomInset: false,
@@ -121,8 +126,91 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
                   ),
                 ),
                 onTap: () {
-                  renderImage();
-                  // context.go("/");
+                  imageFuture = renderImage();
+                  showDialog(
+                      context: context,
+                      builder: (_) {
+                        return  AlertDialog(
+                          content: FutureBuilder<Uint8List?>(
+                              future: imageFuture,
+                              builder: (context, snapshot){
+                                if(snapshot.connectionState != ConnectionState.done){
+                                  return  SizedBox(
+                                    height: height * 0.1,
+                                    child: const Center(
+                                      child: CircularProgressIndicator.adaptive(),
+                                    ),
+                                  );
+                                }
+                                if(!snapshot.hasData || snapshot.data == null){
+                                  return const SizedBox();
+                                }
+                                return InteractiveViewer(
+                                    maxScale: 10,
+                                    child: Container(
+                                      child: Image.memory(snapshot.data!),
+                                      color: Colors.grey.shade200,
+                                    )
+                                );
+                              }
+                          ),
+                          actions: [
+                            Column(
+                              children: <Widget>[
+                                TextField(
+                                  controller: noteNameController,
+                                  autofocus: true,
+                                  textAlign: TextAlign.center,
+                                  decoration: const InputDecoration.collapsed(
+                                    hintText: '名前を入力してください',
+                                  ),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    TextButton(
+                                      child: const Text('キャンセル',
+                                        style: TextStyle(
+                                            color: Colors.blue
+                                        ),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      style: ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                                      ),
+                                    ),
+                                    TextButton(
+                                      style:ButtonStyle(
+                                          backgroundColor: MaterialStateProperty.all<Color>(Colors.white)
+                                      ),
+                                      child: const Text('追加',
+                                        style: TextStyle(color:  Colors.blue),
+                                      ),
+                                      onPressed: () {
+                                        //画像エンコード
+                                        String? noteNameText = noteNameController.text.trim();
+                                        imageFuture!.then((value) {
+                                          Map<String, dynamic>? folder = Hive.box('Folder').get(noteName);
+                                          Map<String, dynamic>? noteMap = {
+                                            noteNameText: value
+                                          };
+                                          folder!.addAll(noteMap);
+                                          print(folder);
+                                          // Hive.box('Note').put(noteName, folder!);
+                                        });
+                                        Get.offNamedUntil('/Note',(route) => false,arguments: index!);
+                                      },
+                                    ),
+                                  ],
+                                )
+                              ],
+                            )
+                          ],
+                        );
+                      }
+                  );
                 },
               ),
             )
@@ -536,13 +624,8 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
         imageDrawable, imageDrawable.copyWith(flipped: !imageDrawable.flipped));
   }
 
-  void renderImage() {
+  Future<Uint8List?> renderImage() {
     final imageSize = globalKey.currentContext!.size;
-    final imageFuture = controller.renderImage(imageSize!).then<Uint8List?>((ui.Image image) => image.pngBytes);
-    showDialog(
-      context: context,
-      builder: (context) =>
-          RenderImageDialog(imageFuture: imageFuture,index: index)
-    );
+    return controller.renderImage(imageSize!).then<Uint8List?>((ui.Image image) => image.pngBytes);
   }
 }

@@ -5,10 +5,15 @@ import 'package:hive_flutter/hive_flutter.dart';
 class FolderController extends GetxController {
 
   List? folderList = [];
+  List? emptyList = [];
 
  @override
   void onInit(){
-   folderList = Hive.box("Folder").get("Folder");
+   if(Hive.box("Folder").get("Folder") != null){
+     folderList = Hive.box("Folder").get("Folder");
+   }else {
+     Hive.box("Folder").put("Folder", emptyList);
+   }
    super.onInit();
  }
 

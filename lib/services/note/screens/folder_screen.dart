@@ -62,7 +62,7 @@ class FolderScreen extends GetWidget<FolderController>{
             ValueListenableBuilder(
               valueListenable: Hive.box("Folder").listenable(keys: ['Folder']),
               builder: (context, box, widget){
-                return Hive.box("Folder").get('Folder').isEmpty == true
+                return Hive.box("Folder").get('Folder').isEmpty == null
                   ? Column(
                     children: [
                       SizedBox(

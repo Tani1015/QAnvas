@@ -25,7 +25,7 @@ class GetRoutes {
     GetPage(name: '/Folder', page: () => const FolderScreen()),
     GetPage(name: '/AddQuestion', page: () => const AddQuestionScreen()),
     GetPage(name: '/AddQuestionNote', page: () => const AddQuestionNoteScreen()),
-    GetPage(name: '/Note', page: () => const NoteScreen(), arguments:  {}),
-    GetPage(name: '/MakeNote', page: () => const MakeNoteScreen(), arguments:  {})
+    GetPage(name: '/Note', page: () => const NoteScreen()),
+    GetPage(name: '/MakeNote', page: () => const MakeNoteScreen())
   ];
 }

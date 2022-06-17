@@ -17,8 +17,6 @@ class NoteScreen extends GetWidget{
     final int? index = Get.arguments;
     final folderProvider = Get.put(FolderController());
     final noteKey = folderProvider.folderList![index!];
-    final noteProvider = Get.put(NoteController(noteKey));
-    final String noteText = Hive.box("Note").get(noteKey).keys.toString();
 
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
@@ -77,15 +75,15 @@ class NoteScreen extends GetWidget{
                         const Text("ノートを追加してください!!")
                       ],
                     )
-                    : Obx(() =>  ListView.separated(
+                    :ListView.separated(
                     shrinkWrap: true,
-                    itemCount: Hive.box("Note").get(noteKey).length,
+                    itemCount: Hive.box('Note').get(noteKey).length,
                     itemBuilder: (BuildContext context, int index){
                       return GestureDetector(
                         child: Slidable(
                           child: Container(
                               margin: const EdgeInsets.all(20),
-                              height: height * 0.73,
+                              height: height * 0.75,
                               decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black),
                                   borderRadius: BorderRadius.circular(10)
@@ -103,8 +101,8 @@ class NoteScreen extends GetWidget{
                                     ListTile(
                                       tileColor: Colors.white,
                                       title: Text(
-                                        noteText.substring(1,noteText.length-1),
-                                        textAlign: TextAlign.center,
+                                          Hive.box("Note").get(noteKey).keys.elementAt(index).toString(),
+                                        textAlign: TextAlign.left,
                                         style: const TextStyle(
                                           fontSize: 23,
                                         ),
@@ -147,8 +145,7 @@ class NoteScreen extends GetWidget{
                       separatorBuilder: (BuildContext context, int index) {
                         return const Divider(height: 0);
                       },
-                    )
-                  );
+                    );
                 }
             )
           ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qanvas/services/note/controller/note_controller.dart';
 import 'package:spring_button/spring_button.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -83,7 +84,8 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
     final textheight = MediaQuery.of(context).viewInsets.bottom;
 
     final TextEditingController noteNameController = TextEditingController();
-    final String noteName = Hive.box('Folder').getAt(0)[index!];
+    final String? noteName = Hive.box('Folder').getAt(0)[index!];
+    final noteProvider = Get.put(NoteController(noteName));
     Future<Uint8List?>? imageFuture;
 
     return Scaffold(
@@ -132,7 +134,7 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
                       builder: (_) {
                         return  AlertDialog(
                           content: FutureBuilder<Uint8List?>(
-                              future: imageFuture,
+                              future: imageFuture!,
                               builder: (context, snapshot){
                                 if(snapshot.connectionState != ConnectionState.done){
                                   return  SizedBox(
@@ -190,17 +192,11 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
                                       ),
                                       onPressed: () {
                                         //画像エンコード
-                                        String? noteNameText = noteNameController.text.trim();
                                         imageFuture!.then((value) {
-                                          Map<String, dynamic>? folder = Hive.box('Folder').get(noteName);
-                                          Map<String, dynamic>? noteMap = {
-                                            noteNameText: value
-                                          };
-                                          folder!.addAll(noteMap);
-                                          print(folder);
-                                          // Hive.box('Note').put(noteName, folder!);
+                                          noteProvider.addNote(value);
+                                          Hive.box('Note').put(noteName, noteProvider.noteList!);
                                         });
-                                        Get.offNamedUntil('/Note',(route) => false,arguments: index!);
+                                        Get.toNamed('/Note',arguments: index!);
                                       },
                                     ),
                                   ],
@@ -548,6 +544,12 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          print(index);
+          print(noteName);
+        },
+      ),
     );
   }
 
@@ -624,7 +626,7 @@ class MakeNoteState extends State<MakeNoteScreen> with SingleTickerProviderState
         imageDrawable, imageDrawable.copyWith(flipped: !imageDrawable.flipped));
   }
 
-  Future<Uint8List?> renderImage() {
+  Future<Uint8List?>? renderImage() {
     final imageSize = globalKey.currentContext!.size;
     return controller.renderImage(imageSize!).then<Uint8List?>((ui.Image image) => image.pngBytes);
   }

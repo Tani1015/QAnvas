@@ -17,6 +17,7 @@ class NoteScreen extends GetWidget{
     final int? index = Get.arguments;
     final folderProvider = Get.put(FolderController());
     final noteKey = folderProvider.folderList![index!];
+    final noteProvider = Get.put(NoteController(noteKey));
 
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
@@ -95,19 +96,20 @@ class NoteScreen extends GetWidget{
                                     Container(
                                       height: height * 0.6,
                                       width: weight * 0.8,
-                                      child: Image.memory(Hive.box('Note').get(noteKey)[Hive.box('Note').get(noteKey).keys.elementAt(index)]),
+                                      child: Image.memory(Hive.box('Note').get(noteKey)[index]),
+                                      //[Hive.box('Note').get(noteKey).keys.elementAt(index)]
                                       color: Colors.white,
                                     ),
-                                    ListTile(
-                                      tileColor: Colors.white,
-                                      title: Text(
-                                          Hive.box("Note").get(noteKey).keys.elementAt(index).toString(),
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(
-                                          fontSize: 23,
-                                        ),
-                                      ),
-                                    ),
+                                    // ListTile(
+                                    //   tileColor: Colors.white,
+                                    //   title: Text(
+                                    //       Hive.box("Note").get(noteKey).keys.elementAt(index).toString(),
+                                    //     textAlign: TextAlign.left,
+                                    //     style: const TextStyle(
+                                    //       fontSize: 23,
+                                    //     ),
+                                    //   ),
+                                    // ),
                                   ],
                                 ),
                               )
@@ -118,7 +120,7 @@ class NoteScreen extends GetWidget{
                                 SlidableAction(
                                   onPressed: (BuildContext context){
                                     Hive.box('Note').get(noteKey).keys.elementAt(index);
-                                    Hive.box("Note").get(noteKey).remove(Hive.box('Note').get(noteKey).keys.elementAt(index));
+                                    Hive.box("Note").get(noteKey).remove(Hive.box('Note').get(noteKey)[index]);
                                   },
                                   flex: 1,
                                   icon: Icons.delete,
@@ -153,7 +155,8 @@ class NoteScreen extends GetWidget{
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Get.toNamed('/MakeNote',arguments: index);
+          // Get.toNamed('/MakeNote',arguments: index);
+          print(noteProvider.noteList);
         },
         label:  const Text("ノートを作る"),
         backgroundColor: Colors.red,

@@ -1,42 +1,56 @@
-import 'package:flutter/material.dart';
+import 'dart:io';
+
+
 import 'package:firebase_core/firebase_core.dart';
-import 'package:get/get.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:qanvas/model/repositories/package_info/packdge_info_repository.dart';
+import 'package:qanvas/model/repositories/shared_preferences/shared_preference_repository.dart';
+import 'package:qanvas/model/use_cases/image_compress.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-//クラスインポート
-import 'package:qanvas/router/get_routes.dart';
-import 'package:qanvas/services/user/pages/sign_in.dart';
+import 'presentation/pages/app.dart';
 
-List<Box> boxlist = [];
 
-Future<List<Box>> _openBox() async{
-  var dir = await getApplicationDocumentsDirectory();
-  Hive.init(dir.path);
-  //複数のHive Box
-  var folderBox = await Hive.openBox("Folder");
-  var noteBox = await Hive.openBox("Note");
-  var imageBox = await Hive.openBox("Image");
-  return boxlist;
-}
-
-void main() async {
+Future<void> main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  await _openBox();
-  runApp(const Myapp());
+  late final PackageInfo packageInfo;
+  late final SharedPreferences sharedPreferences;
+  late final Directory tempDirectory;
+
+  await Future.wait([
+    Firebase.initializeApp(),
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown
+    ]),
+
+    Future(() async {
+      packageInfo = await PackageInfo.fromPlatform();
+    }),
+    Future(() async{
+      sharedPreferences = await SharedPreferences.getInstance();
+    }),
+    Future(() async {
+      tempDirectory = await getTemporaryDirectory();
+    }),
+  ]);
+
+  runApp(
+    ProviderScope(
+      overrides: [
+        sharedPreferencesRepositoryProvider.overrideWithValue(SharedPreferencesRepository(sharedPreferences)),
+        packageInfoRepositoryProvider.overrideWithValue(PackageInfoRepository(packageInfo)),
+        imageCompressProvider.overrideWithValue(ImageCompress(tempDirectory))
+      ],
+      child:  const App(),
+    ),
+  );
 }
 
-class Myapp extends StatelessWidget{
-  const Myapp({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      getPages: GetRoutes.pages,
-      home: SignInPage(),
-    );
-  }
 
-}
+

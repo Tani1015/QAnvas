@@ -25,7 +25,7 @@ class $AssetsImagesGen {
       const AssetGenImage('assets/images/QAnvas_splash2.png');
 
   /// File path: assets/images/QAnvas_title.png
-  AssetGenImage get qAnvasTitle =>
+  AssetGenImage get QAnvasTitle =>
       const AssetGenImage('assets/images/QAnvas_title.png');
 
   /// File path: assets/images/buturi.png

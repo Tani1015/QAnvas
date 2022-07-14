@@ -5,11 +5,11 @@ import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/gen/assets.gen.dart';
 import 'package:qanvas/model/entities/sample/user/user.dart';
+import 'package:qanvas/model/use_cases/sample/item_controller.dart';
 import 'package:qanvas/model/use_cases/sample/my_profile.dart';
 import 'package:qanvas/presentation/custom_hooks/use_effect_once.dart';
 import 'package:qanvas/presentation/pages/sample/user/user_edit_page.dart';
 import 'package:qanvas/presentation/widgets/thumbnail.dart';
-import 'package:qanvas/utils/provider.dart';
 
 class UserPage extends HookConsumerWidget {
   const UserPage({super.key});
@@ -98,7 +98,7 @@ class UserPage extends HookConsumerWidget {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: ListTile(
                                   title: Text(data.title!),
-                                  subtitle: Text(data.address!),
+                                  subtitle: Text(data.question!),
                                 ),
                               )
                             ],
@@ -110,11 +110,6 @@ class UserPage extends HookConsumerWidget {
             ],
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          print('${ref.watch(authStateProvider.state).state}');
-        },
       ),
     );
   }

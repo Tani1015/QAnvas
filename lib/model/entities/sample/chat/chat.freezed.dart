@@ -20,10 +20,10 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Chat {
-  String? get chatId => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
-  String? get chat => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
+  String? get chatId => throw _privateConstructorUsedError; //ref.id
+  List<String>? get userId => throw _privateConstructorUsedError; //userList
+  String? get chat => throw _privateConstructorUsedError; //chat
+  String? get name => throw _privateConstructorUsedError; //user_name
   @DateTimeTimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -38,7 +38,7 @@ abstract class $ChatCopyWith<$Res> {
       _$ChatCopyWithImpl<$Res>;
   $Res call(
       {String? chatId,
-      String? userId,
+      List<String>? userId,
       String? chat,
       String? name,
       @DateTimeTimestampConverter() DateTime? createdAt});
@@ -68,7 +68,7 @@ class _$ChatCopyWithImpl<$Res> implements $ChatCopyWith<$Res> {
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       chat: chat == freezed
           ? _value.chat
           : chat // ignore: cast_nullable_to_non_nullable
@@ -92,7 +92,7 @@ abstract class _$$_ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
   @override
   $Res call(
       {String? chatId,
-      String? userId,
+      List<String>? userId,
       String? chat,
       String? name,
       @DateTimeTimestampConverter() DateTime? createdAt});
@@ -121,9 +121,9 @@ class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
           : chatId // ignore: cast_nullable_to_non_nullable
               as String?,
       userId: userId == freezed
-          ? _value.userId
+          ? _value._userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as List<String>?,
       chat: chat == freezed
           ? _value.chat
           : chat // ignore: cast_nullable_to_non_nullable
@@ -145,22 +145,35 @@ class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
 class _$_Chat extends _Chat with DiagnosticableTreeMixin {
   const _$_Chat(
       {this.chatId,
-      this.userId,
+      final List<String>? userId,
       this.chat,
       this.name,
       @DateTimeTimestampConverter() this.createdAt})
-      : super._();
+      : _userId = userId,
+        super._();
 
   factory _$_Chat.fromJson(Map<String, dynamic> json) => _$$_ChatFromJson(json);
 
   @override
   final String? chatId;
+//ref.id
+  final List<String>? _userId;
+//ref.id
   @override
-  final String? userId;
+  List<String>? get userId {
+    final value = _userId;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
+
+//userList
   @override
   final String? chat;
+//chat
   @override
   final String? name;
+//user_name
   @override
   @DateTimeTimestampConverter()
   final DateTime? createdAt;
@@ -188,7 +201,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$_Chat &&
             const DeepCollectionEquality().equals(other.chatId, chatId) &&
-            const DeepCollectionEquality().equals(other.userId, userId) &&
+            const DeepCollectionEquality().equals(other._userId, _userId) &&
             const DeepCollectionEquality().equals(other.chat, chat) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt));
@@ -199,7 +212,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(chatId),
-      const DeepCollectionEquality().hash(userId),
+      const DeepCollectionEquality().hash(_userId),
       const DeepCollectionEquality().hash(chat),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(createdAt));
@@ -218,7 +231,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
 abstract class _Chat extends Chat {
   const factory _Chat(
       {final String? chatId,
-      final String? userId,
+      final List<String>? userId,
       final String? chat,
       final String? name,
       @DateTimeTimestampConverter() final DateTime? createdAt}) = _$_Chat;
@@ -228,13 +241,13 @@ abstract class _Chat extends Chat {
 
   @override
   String? get chatId => throw _privateConstructorUsedError;
-  @override
-  String? get userId => throw _privateConstructorUsedError;
-  @override
+  @override //ref.id
+  List<String>? get userId => throw _privateConstructorUsedError;
+  @override //userList
   String? get chat => throw _privateConstructorUsedError;
-  @override
+  @override //chat
   String? get name => throw _privateConstructorUsedError;
-  @override
+  @override //user_name
   @DateTimeTimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @override

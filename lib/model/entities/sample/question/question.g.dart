@@ -8,7 +8,8 @@ part of 'question.dart';
 
 _$_Question _$$_QuestionFromJson(Map<String, dynamic> json) => _$_Question(
       questionId: json['questionId'] as String?,
-      userId: json['userId'] as String?,
+      userId:
+          (json['userId'] as List<dynamic>?)?.map((e) => e as String).toList(),
       question: json['question'] as String?,
       name: json['name'] as String?,
       comment: json['comment'] == null

@@ -16,9 +16,9 @@ _$_Item _$$_ItemFromJson(Map<String, dynamic> json) => _$_Item(
       imageUrl: json['imageUrl'] == null
           ? null
           : StorageFile.fromJson(json['imageUrl'] as Map<String, dynamic>),
-      comment: json['comment'] == null
-          ? null
-          : Comment.fromJson(json['comment'] as Map<String, dynamic>),
+      comment: (json['comment'] as List<dynamic>?)
+          ?.map((e) => Comment.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$_ItemToJson(_$_Item instance) => <String, dynamic>{

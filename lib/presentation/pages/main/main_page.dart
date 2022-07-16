@@ -3,6 +3,8 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:qanvas/extensions/context_extension.dart';
+import 'package:qanvas/presentation/pages/sample/search/search_page.dart';
+import 'package:qanvas/presentation/pages/sample/user/user_page.dart';
 
 import 'tab_navigator.dart';
 
@@ -21,7 +23,8 @@ class MainPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final widgets = useState<List<Widget>>([
-
+        const SearchScreen(),
+        const UserPage()
     ]);
 
     final navigatorKeys = useState([

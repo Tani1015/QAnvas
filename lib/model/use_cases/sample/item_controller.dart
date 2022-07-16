@@ -1,6 +1,7 @@
 //item provider
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/exceptions/app_exception.dart';
 import 'package:qanvas/extensions/exception_extension.dart';
@@ -15,6 +16,11 @@ import 'package:qanvas/model/repositories/firestore/document_repository.dart';
 import 'package:qanvas/results/result_void_data.dart';
 import 'package:qanvas/utils/provider.dart';
 import 'package:qanvas/utils/uuid_generator.dart';
+
+final searchTextEditingController = StateProvider((ref){
+  return TextEditingController(text: '');
+});
+
 
 final itemProvider = StateNotifierProvider<ItemController, List<Item>>((ref) {
   ref.watch(authStateProvider);

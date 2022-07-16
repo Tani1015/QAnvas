@@ -27,7 +27,7 @@ mixin _$Item {
   @DateTimeTimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   StorageFile? get imageUrl => throw _privateConstructorUsedError;
-  Comment? get comment => throw _privateConstructorUsedError;
+  List<Comment>? get comment => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,10 +45,9 @@ abstract class $ItemCopyWith<$Res> {
       String? category,
       @DateTimeTimestampConverter() DateTime? createdAt,
       StorageFile? imageUrl,
-      Comment? comment});
+      List<Comment>? comment});
 
   $StorageFileCopyWith<$Res>? get imageUrl;
-  $CommentCopyWith<$Res>? get comment;
 }
 
 /// @nodoc
@@ -97,7 +96,7 @@ class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
       comment: comment == freezed
           ? _value.comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as Comment?,
+              as List<Comment>?,
     ));
   }
 
@@ -109,17 +108,6 @@ class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
 
     return $StorageFileCopyWith<$Res>(_value.imageUrl!, (value) {
       return _then(_value.copyWith(imageUrl: value));
-    });
-  }
-
-  @override
-  $CommentCopyWith<$Res>? get comment {
-    if (_value.comment == null) {
-      return null;
-    }
-
-    return $CommentCopyWith<$Res>(_value.comment!, (value) {
-      return _then(_value.copyWith(comment: value));
     });
   }
 }
@@ -136,12 +124,10 @@ abstract class _$$_ItemCopyWith<$Res> implements $ItemCopyWith<$Res> {
       String? category,
       @DateTimeTimestampConverter() DateTime? createdAt,
       StorageFile? imageUrl,
-      Comment? comment});
+      List<Comment>? comment});
 
   @override
   $StorageFileCopyWith<$Res>? get imageUrl;
-  @override
-  $CommentCopyWith<$Res>? get comment;
 }
 
 /// @nodoc
@@ -189,9 +175,9 @@ class __$$_ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as StorageFile?,
       comment: comment == freezed
-          ? _value.comment
+          ? _value._comment
           : comment // ignore: cast_nullable_to_non_nullable
-              as Comment?,
+              as List<Comment>?,
     ));
   }
 }
@@ -206,8 +192,9 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
       this.category,
       @DateTimeTimestampConverter() this.createdAt,
       this.imageUrl,
-      this.comment})
-      : super._();
+      final List<Comment>? comment})
+      : _comment = comment,
+        super._();
 
   factory _$_Item.fromJson(Map<String, dynamic> json) => _$$_ItemFromJson(json);
 
@@ -224,8 +211,14 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
   final DateTime? createdAt;
   @override
   final StorageFile? imageUrl;
+  final List<Comment>? _comment;
   @override
-  final Comment? comment;
+  List<Comment>? get comment {
+    final value = _comment;
+    if (value == null) return null;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
+  }
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -257,7 +250,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
             const DeepCollectionEquality().equals(other.category, category) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt) &&
             const DeepCollectionEquality().equals(other.imageUrl, imageUrl) &&
-            const DeepCollectionEquality().equals(other.comment, comment));
+            const DeepCollectionEquality().equals(other._comment, _comment));
   }
 
   @JsonKey(ignore: true)
@@ -270,7 +263,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(category),
       const DeepCollectionEquality().hash(createdAt),
       const DeepCollectionEquality().hash(imageUrl),
-      const DeepCollectionEquality().hash(comment));
+      const DeepCollectionEquality().hash(_comment));
 
   @JsonKey(ignore: true)
   @override
@@ -291,7 +284,7 @@ abstract class _Item extends Item {
       final String? category,
       @DateTimeTimestampConverter() final DateTime? createdAt,
       final StorageFile? imageUrl,
-      final Comment? comment}) = _$_Item;
+      final List<Comment>? comment}) = _$_Item;
   const _Item._() : super._();
 
   factory _Item.fromJson(Map<String, dynamic> json) = _$_Item.fromJson;
@@ -310,7 +303,7 @@ abstract class _Item extends Item {
   @override
   StorageFile? get imageUrl => throw _privateConstructorUsedError;
   @override
-  Comment? get comment => throw _privateConstructorUsedError;
+  List<Comment>? get comment => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_ItemCopyWith<_$_Item> get copyWith => throw _privateConstructorUsedError;

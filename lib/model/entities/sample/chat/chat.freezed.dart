@@ -20,10 +20,10 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Chat {
-  String? get chatId => throw _privateConstructorUsedError;
-  String? get userId => throw _privateConstructorUsedError;
-  String? get chat => throw _privateConstructorUsedError;
-  String? get name => throw _privateConstructorUsedError;
+  String? get chatId => throw _privateConstructorUsedError; //ref.id
+  String? get userId => throw _privateConstructorUsedError; //userList
+  String? get chat => throw _privateConstructorUsedError; //chat
+  String? get name => throw _privateConstructorUsedError; //user_name
   @DateTimeTimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
 
@@ -141,7 +141,8 @@ class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Chat extends _Chat with DiagnosticableTreeMixin {
   const _$_Chat(
       {this.chatId,
@@ -155,12 +156,16 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
 
   @override
   final String? chatId;
+//ref.id
   @override
   final String? userId;
+//userList
   @override
   final String? chat;
+//chat
   @override
   final String? name;
+//user_name
   @override
   @DateTimeTimestampConverter()
   final DateTime? createdAt;
@@ -228,13 +233,13 @@ abstract class _Chat extends Chat {
 
   @override
   String? get chatId => throw _privateConstructorUsedError;
-  @override
+  @override //ref.id
   String? get userId => throw _privateConstructorUsedError;
-  @override
+  @override //userList
   String? get chat => throw _privateConstructorUsedError;
-  @override
+  @override //chat
   String? get name => throw _privateConstructorUsedError;
-  @override
+  @override //user_name
   @DateTimeTimestampConverter()
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @override

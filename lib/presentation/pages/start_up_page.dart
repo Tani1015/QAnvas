@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:qanvas/model/repositories/firebase_auth/firebase_atuh_repository.dart';
+import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/model/repositories/shared_preferences/shared_preference_key.dart';
 import 'package:qanvas/model/repositories/shared_preferences/shared_preference_repository.dart';
 import 'package:qanvas/model/use_cases/auth/email/sign_in_with_email_and_password.dart';

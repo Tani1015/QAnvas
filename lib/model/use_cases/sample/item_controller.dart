@@ -1,12 +1,13 @@
 //item provider
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/exceptions/app_exception.dart';
 import 'package:qanvas/extensions/exception_extension.dart';
 import 'package:qanvas/model/entities/sample/item/item.dart';
 import 'package:qanvas/model/entities/storage_file/storage_file.dart';
-import 'package:qanvas/model/repositories/firebase_auth/firebase_atuh_repository.dart';
+import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/model/repositories/firebase_storage/firebase_storage_repository.dart';
 import 'package:qanvas/model/repositories/firebase_storage/mime_type.dart';
 import 'package:qanvas/model/repositories/firestore/collection_paging_repository.dart';
@@ -16,8 +17,14 @@ import 'package:qanvas/results/result_void_data.dart';
 import 'package:qanvas/utils/provider.dart';
 import 'package:qanvas/utils/uuid_generator.dart';
 
+final searchTextEditingController = StateProvider.autoDispose((ref){
+  return TextEditingController(text: '');
+});
+
+
 final itemProvider = StateNotifierProvider<ItemController, List<Item>>((ref) {
-  ref.watch(authStateProvider);
+  ref..watch(authStateProvider)
+  ..read(searchTextEditingController);
   return ItemController(ref.read);
 });
 
@@ -27,12 +34,16 @@ class ItemController extends StateNotifier<List<Item>> {
     if (userId == null) {
       return;
     }
+
+    final searchText = _searchText.text;
+
     _collectionPagingRepository = _read(
       itemPagingProvider(
         CollectionParam<Item>(
           query: Document.colRef(
             Item.collectionPath(userId),
-          ).limit(10),
+          ).where('category', isEqualTo: searchText)
+              .orderBy('created',descending: true),
           decode: Item.fromJson,
         ),
       ),
@@ -40,6 +51,9 @@ class ItemController extends StateNotifier<List<Item>> {
   }
 
   final Reader _read;
+
+  TextEditingController get _searchText =>
+      _read(searchTextEditingController);
 
   FirebaseAuthRepository get _firebaseAuthRepository =>
       _read(firebaseAuthRepositoryProvider);
@@ -74,13 +88,14 @@ class ItemController extends StateNotifier<List<Item>> {
     }
   }
 
-  Future<ResultVoidData> create(String title,String category,double lat,double lng,String address,Uint8List file) async {
+  Future<ResultVoidData> create(String title,String question, String category,Uint8List file) async {
     try{
       final userId = _firebaseAuthRepository.loggedInUserId;
       if(userId == null){
         throw AppException(title: 'ログインしてください');
       }
       final ref = Document.docRef(Item.collectionPath(userId));
+      final now = DateTime.now();
 
       //画像の保存(cloud storage)
       final filename = UuidGenerator.create();
@@ -95,13 +110,48 @@ class ItemController extends StateNotifier<List<Item>> {
       final data = Item(
         itemId: ref.id,
         title: title,
+        question: question,
         category: category,
-
         imageUrl: StorageFile(
           url: imageUrl,
           path: imagePath,
           mimeType: mimeType.value,
         ),
+        createdAt: now
+      );
+
+      await _documentRepository.save(
+        Item.docPath(userId, ref.id),
+        data: data.toCreateDoc,
+      );
+
+      //state変更
+      state = [data, ...state];
+      return const ResultVoidData.success();
+    }on AppException catch(e) {
+      return ResultVoidData.failure(e);
+    }on Exception catch (e) {
+      return ResultVoidData.failure(AppException.error(e.errorMessage));
+    }
+  }
+
+  Future<ResultVoidData> createWithNoteImage(String title,String question, String category) async {
+    try{
+      final userId = _firebaseAuthRepository.loggedInUserId;
+      if(userId == null){
+        throw AppException(title: 'ログインしてください');
+      }
+      final ref = Document.docRef(Item.collectionPath(userId));
+      final now = DateTime.now();
+
+
+      //Firestoreへの保存
+      final data = Item(
+          itemId: ref.id,
+          title: title,
+          question: question,
+          category: category,
+          createdAt: now
       );
 
       await _documentRepository.save(

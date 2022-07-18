@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/gen/assets.gen.dart';
-import 'package:qanvas/model/repositories/firebase_auth/firebase_atuh_repository.dart';
+import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/model/repositories/shared_preferences/shared_preference_key.dart';
 import 'package:qanvas/model/repositories/shared_preferences/shared_preference_repository.dart';
 import 'package:qanvas/model/use_cases/auth/email/create_user_with_email_and_password.dart';
@@ -57,7 +57,7 @@ class SignupPage extends HookConsumerWidget{
                       SizedBox(
                         height: context.height * 0.2,
                         width: context.width * 0.6,
-                        child: Assets.images.QAnvasTitle.image(),
+                        child: Assets.images.qAnvasTitle.image(),
                       ),
                     ],
                   ),

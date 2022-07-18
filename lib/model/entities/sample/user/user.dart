@@ -20,7 +20,7 @@ class User with _$User {
   factory User.fromJson(Map<String, dynamic> json) =>
       _$UserFromJson(json);
 
-  static String get collectionPath => 'angya/v1/users';
+  static String get collectionPath => 'QAnvas/v1/users';
   static CollectionReference<SnapType> colRef() =>
       Document.colRef(collectionPath);
 

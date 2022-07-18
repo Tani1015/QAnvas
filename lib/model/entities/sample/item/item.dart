@@ -31,7 +31,7 @@ class Item with _$Item {
     String? category,
     @DateTimeTimestampConverter() DateTime? createdAt,
     StorageFile? imageUrl,
-    Comment? comment,
+    List<Comment>? comment,
   }) = _Item;
   const Item._();
 
@@ -62,7 +62,7 @@ class Item with _$Item {
     'category' : category,
     'createdAt' :createdAt ?? FieldValue.serverTimestamp(),
     'imageUrl' : imageUrl?.toJson(),
-    'comment' : comment?.toJson(),
+    'comment' : comment,
   };
 
   //no image

@@ -8,8 +8,7 @@ part of 'chat.dart';
 
 _$_Chat _$$_ChatFromJson(Map<String, dynamic> json) => _$_Chat(
       chatId: json['chatId'] as String?,
-      userId:
-          (json['userId'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      userId: json['userId'] as String?,
       chat: json['chat'] as String?,
       name: json['name'] as String?,
       createdAt: const DateTimeTimestampConverter()

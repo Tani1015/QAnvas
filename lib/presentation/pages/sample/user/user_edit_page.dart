@@ -52,7 +52,7 @@ class UserEditPage extends HookConsumerWidget{
         title: SizedBox(
           height: context.height * 0.1,
           width: context.width * 0.3,
-          child: Assets.images.QAnvasTitle.image(),
+          child: Assets.images.qAnvasTitle.image(),
         ),
         iconTheme: const IconThemeData(
           color: Colors.black,

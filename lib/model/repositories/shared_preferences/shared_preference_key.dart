@@ -1,8 +1,7 @@
 enum SharedPreferencesKey {
   email,
   password,
-  lat,
-  lng
+  note
 }
 
 extension SharedPreferencesKeyExtension on SharedPreferencesKey {

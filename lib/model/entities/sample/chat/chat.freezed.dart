@@ -21,7 +21,7 @@ Chat _$ChatFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Chat {
   String? get chatId => throw _privateConstructorUsedError; //ref.id
-  List<String>? get userId => throw _privateConstructorUsedError; //userList
+  String? get userId => throw _privateConstructorUsedError; //userList
   String? get chat => throw _privateConstructorUsedError; //chat
   String? get name => throw _privateConstructorUsedError; //user_name
   @DateTimeTimestampConverter()
@@ -38,7 +38,7 @@ abstract class $ChatCopyWith<$Res> {
       _$ChatCopyWithImpl<$Res>;
   $Res call(
       {String? chatId,
-      List<String>? userId,
+      String? userId,
       String? chat,
       String? name,
       @DateTimeTimestampConverter() DateTime? createdAt});
@@ -68,7 +68,7 @@ class _$ChatCopyWithImpl<$Res> implements $ChatCopyWith<$Res> {
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as String?,
       chat: chat == freezed
           ? _value.chat
           : chat // ignore: cast_nullable_to_non_nullable
@@ -92,7 +92,7 @@ abstract class _$$_ChatCopyWith<$Res> implements $ChatCopyWith<$Res> {
   @override
   $Res call(
       {String? chatId,
-      List<String>? userId,
+      String? userId,
       String? chat,
       String? name,
       @DateTimeTimestampConverter() DateTime? createdAt});
@@ -121,9 +121,9 @@ class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
           : chatId // ignore: cast_nullable_to_non_nullable
               as String?,
       userId: userId == freezed
-          ? _value._userId
+          ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as String?,
       chat: chat == freezed
           ? _value.chat
           : chat // ignore: cast_nullable_to_non_nullable
@@ -141,32 +141,24 @@ class __$$_ChatCopyWithImpl<$Res> extends _$ChatCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Chat extends _Chat with DiagnosticableTreeMixin {
   const _$_Chat(
       {this.chatId,
-      final List<String>? userId,
+      this.userId,
       this.chat,
       this.name,
       @DateTimeTimestampConverter() this.createdAt})
-      : _userId = userId,
-        super._();
+      : super._();
 
   factory _$_Chat.fromJson(Map<String, dynamic> json) => _$$_ChatFromJson(json);
 
   @override
   final String? chatId;
 //ref.id
-  final List<String>? _userId;
-//ref.id
   @override
-  List<String>? get userId {
-    final value = _userId;
-    if (value == null) return null;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final String? userId;
 //userList
   @override
   final String? chat;
@@ -201,7 +193,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
         (other.runtimeType == runtimeType &&
             other is _$_Chat &&
             const DeepCollectionEquality().equals(other.chatId, chatId) &&
-            const DeepCollectionEquality().equals(other._userId, _userId) &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.chat, chat) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.createdAt, createdAt));
@@ -212,7 +204,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(chatId),
-      const DeepCollectionEquality().hash(_userId),
+      const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(chat),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(createdAt));
@@ -231,7 +223,7 @@ class _$_Chat extends _Chat with DiagnosticableTreeMixin {
 abstract class _Chat extends Chat {
   const factory _Chat(
       {final String? chatId,
-      final List<String>? userId,
+      final String? userId,
       final String? chat,
       final String? name,
       @DateTimeTimestampConverter() final DateTime? createdAt}) = _$_Chat;
@@ -242,7 +234,7 @@ abstract class _Chat extends Chat {
   @override
   String? get chatId => throw _privateConstructorUsedError;
   @override //ref.id
-  List<String>? get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   @override //userList
   String? get chat => throw _privateConstructorUsedError;
   @override //chat

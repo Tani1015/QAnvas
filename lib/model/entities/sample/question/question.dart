@@ -12,7 +12,7 @@ part 'question.g.dart';
 class Question with _$Question {
   const factory Question({
     String? questionId,
-    List<String>? userId,
+    String? userId,
     String? question,
     String? name,
     Comment? comment,

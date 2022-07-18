@@ -43,7 +43,7 @@ class UserPage extends HookConsumerWidget {
         title: SizedBox(
           height: context.height * 0.1,
           width: context.width * 0.3,
-          child: Assets.images.QAnvasTitle.image(),
+          child: Assets.images.qAnvasTitle.image(),
         ),
 
         actions: [
@@ -85,8 +85,9 @@ class UserPage extends HookConsumerWidget {
                           color: Colors.grey.shade200,
                           child: Column(
                             children: [
-
-                              Padding(
+                              data.imageUrl == null
+                              ? const SizedBox()
+                              : Padding(
                                 padding: const EdgeInsets.all(8),
                                 child: Thumbnail(
                                   height: context.height * 0.4,

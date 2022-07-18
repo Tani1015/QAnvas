@@ -4,7 +4,7 @@ import 'dart:typed_data';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/model/entities/sample/user/user.dart';
 import 'package:qanvas/model/entities/storage_file/storage_file.dart';
-import 'package:qanvas/model/repositories/firebase_auth/firebase_atuh_repository.dart';
+import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/model/repositories/firebase_storage/firebase_storage_repository.dart';
 import 'package:qanvas/model/repositories/firebase_storage/mime_type.dart';
 import 'package:qanvas/model/repositories/firestore/document_repository.dart';

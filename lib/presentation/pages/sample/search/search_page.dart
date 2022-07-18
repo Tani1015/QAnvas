@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/extensions/context_extension.dart';
 import 'package:qanvas/model/use_cases/sample/item_controller.dart';
+import 'package:qanvas/presentation/pages/sample/search/make_question_page.dart';
+import 'package:qanvas/presentation/pages/sample/search/search_result_page.dart';
 
 class SearchScreen extends HookConsumerWidget{
   const SearchScreen({Key? key}) : super(key: key);
@@ -12,7 +14,6 @@ class SearchScreen extends HookConsumerWidget{
     final searchTextController = ref.watch(searchTextEditingController);
 
     final iconlist = [
-      "assets/images/sibouko.png",
       "assets/images/kokugo.png",
       "assets/images/eigo.png",
       "assets/images/sugaku.png",
@@ -23,7 +24,6 @@ class SearchScreen extends HookConsumerWidget{
     ];
 
     final categorylist = [
-      "志望校",
       "国語",
       "英語",
       "数学",
@@ -88,6 +88,9 @@ class SearchScreen extends HookConsumerWidget{
                           ),
                         ),
                       ),
+                      onFieldSubmitted: (submitted) {
+                        SearchResultPage.show(context);
+                      },
                     ),
                   ),
                   SizedBox(height: context.height * 0.03),
@@ -142,7 +145,7 @@ class SearchScreen extends HookConsumerWidget{
         ),
         floatingActionButton:FloatingActionButton.extended(
             onPressed: () {
-
+              MakeQuestionPage.show(context);
             },
             heroTag: "search",
             label:  const Text("質問する"),

@@ -12,9 +12,10 @@ part 'chat.g.dart';
 
 @freezed
 class Chat with _$Chat {
+  @JsonSerializable(explicitToJson: true)
   const factory Chat({
     String? chatId, //ref.id
-    List<String>? userId, //userList
+    String? userId, //userList
     String? chat, //chat
     String? name, //user_name
     @DateTimeTimestampConverter() DateTime? createdAt,

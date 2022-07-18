@@ -21,7 +21,7 @@ Question _$QuestionFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$Question {
   String? get questionId => throw _privateConstructorUsedError;
-  List<String>? get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   String? get question => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   Comment? get comment => throw _privateConstructorUsedError;
@@ -40,7 +40,7 @@ abstract class $QuestionCopyWith<$Res> {
       _$QuestionCopyWithImpl<$Res>;
   $Res call(
       {String? questionId,
-      List<String>? userId,
+      String? userId,
       String? question,
       String? name,
       Comment? comment,
@@ -74,7 +74,7 @@ class _$QuestionCopyWithImpl<$Res> implements $QuestionCopyWith<$Res> {
       userId: userId == freezed
           ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as String?,
       question: question == freezed
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -114,7 +114,7 @@ abstract class _$$_QuestionCopyWith<$Res> implements $QuestionCopyWith<$Res> {
   @override
   $Res call(
       {String? questionId,
-      List<String>? userId,
+      String? userId,
       String? question,
       String? name,
       Comment? comment,
@@ -149,9 +149,9 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
           : questionId // ignore: cast_nullable_to_non_nullable
               as String?,
       userId: userId == freezed
-          ? _value._userId
+          ? _value.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+              as String?,
       question: question == freezed
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
@@ -177,28 +177,20 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
 class _$_Question extends _Question with DiagnosticableTreeMixin {
   const _$_Question(
       {this.questionId,
-      final List<String>? userId,
+      this.userId,
       this.question,
       this.name,
       this.comment,
       @DateTimeTimestampConverter() this.createdAt})
-      : _userId = userId,
-        super._();
+      : super._();
 
   factory _$_Question.fromJson(Map<String, dynamic> json) =>
       _$$_QuestionFromJson(json);
 
   @override
   final String? questionId;
-  final List<String>? _userId;
   @override
-  List<String>? get userId {
-    final value = _userId;
-    if (value == null) return null;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
-
+  final String? userId;
   @override
   final String? question;
   @override
@@ -234,7 +226,7 @@ class _$_Question extends _Question with DiagnosticableTreeMixin {
             other is _$_Question &&
             const DeepCollectionEquality()
                 .equals(other.questionId, questionId) &&
-            const DeepCollectionEquality().equals(other._userId, _userId) &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.question, question) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other.comment, comment) &&
@@ -246,7 +238,7 @@ class _$_Question extends _Question with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(questionId),
-      const DeepCollectionEquality().hash(_userId),
+      const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(question),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(comment),
@@ -266,7 +258,7 @@ class _$_Question extends _Question with DiagnosticableTreeMixin {
 abstract class _Question extends Question {
   const factory _Question(
       {final String? questionId,
-      final List<String>? userId,
+      final String? userId,
       final String? question,
       final String? name,
       final Comment? comment,
@@ -278,7 +270,7 @@ abstract class _Question extends Question {
   @override
   String? get questionId => throw _privateConstructorUsedError;
   @override
-  List<String>? get userId => throw _privateConstructorUsedError;
+  String? get userId => throw _privateConstructorUsedError;
   @override
   String? get question => throw _privateConstructorUsedError;
   @override

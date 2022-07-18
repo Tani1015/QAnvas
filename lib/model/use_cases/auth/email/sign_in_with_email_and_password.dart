@@ -1,6 +1,6 @@
 
 //クラスインポート
-import 'package:qanvas/model/repositories/firebase_auth/firebase_atuh_repository.dart';
+import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/utils/provider.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 

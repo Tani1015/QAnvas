@@ -24,6 +24,7 @@ final roomChatPagingProvider = Provider.family
 
 @freezed
 class RoomChat with _$RoomChat {
+  @JsonSerializable(explicitToJson: true)
   const factory RoomChat({
     String? roomId,
     String? roomName,
@@ -42,9 +43,9 @@ class RoomChat with _$RoomChat {
   static CollectionReference<SnapType> colRef() =>
     Document.colRef(collectionPath);
 
-  static String docPath() => collectionPath;
-  static DocumentReference<SnapType> docRef() =>
-      Document.docRefWithDocPath(docPath());
+  static String docPath(String id) => '$collectionPath/$id';
+  static DocumentReference<SnapType> docRef(String id) =>
+      Document.docRefWithDocPath(docPath(id));
 
   Map<String, dynamic> get toCreateDoc => <String, dynamic> {
     'roomId' : roomId,
@@ -68,6 +69,14 @@ class RoomChat with _$RoomChat {
       ...toJson(),
       'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
     }..remove('roomId')..remove('roomName')..remove('userId')..remove('chatList');
+    return data;
+  }
+
+  Map<String, dynamic> get toDocWithUser {
+    final data = <String, dynamic> {
+      ...toJson(),
+      'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
+    }..remove('roomId')..remove('roomName')..remove('questionList')..remove('chatList');
     return data;
   }
 

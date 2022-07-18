@@ -3,6 +3,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:qanvas/extensions/context_extension.dart';
+import 'package:qanvas/model/entities/sample/room_chat/room_chat.dart';
+import 'package:qanvas/presentation/pages/sample/chat/room_chat_page.dart';
+import 'package:qanvas/presentation/pages/sample/note/note_page.dart';
+// import 'package:qanvas/presentation/pages/sample/note/note_page.dart';
+import 'package:qanvas/presentation/pages/sample/sample_chat/roomList_page.dart';
 import 'package:qanvas/presentation/pages/sample/search/search_page.dart';
 import 'package:qanvas/presentation/pages/sample/user/user_page.dart';
 
@@ -23,11 +28,15 @@ class MainPage extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final widgets = useState<List<Widget>>([
-        const SearchScreen(),
-        const UserPage()
+      const SearchScreen(),
+      RoomListPage(),
+      const NotePage(),
+      const UserPage(),
     ]);
 
     final navigatorKeys = useState([
+      GlobalKey<NavigatorState>(),
+      GlobalKey<NavigatorState>(),
       GlobalKey<NavigatorState>(),
       GlobalKey<NavigatorState>(),
     ]);
@@ -63,6 +72,16 @@ class MainPage extends HookConsumerWidget {
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
               label: 'ホーム',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.question_answer),
+              label: 'チャット',
+              tooltip: '',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.description),
+              label: 'ノート',
               tooltip: '',
             ),
             BottomNavigationBarItem(

@@ -29,7 +29,7 @@ class MainPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final widgets = useState<List<Widget>>([
       const SearchScreen(),
-      RoomListPage(),
+      const RoomChatPage(),
       const NotePage(),
       const UserPage(),
     ]);

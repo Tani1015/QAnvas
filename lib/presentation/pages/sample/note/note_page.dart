@@ -20,7 +20,7 @@ class NotePage extends HookConsumerWidget{
     final folderBox = Hive.box("Folder");
     final List<String> emptyList = [];
     final folderList = folderBox.get("Folder");
-    final useFolderList = useState<List<String>>(folderList);
+    final useFolderList = useState<List<dynamic>>(folderList);
 
     useEffectOnce(() {
       if(folderList == null){

@@ -89,7 +89,7 @@ class AddRoomPage extends HookConsumerWidget {
                   userIdList.add(userId!);
                   final List<Question> emptyQuestionList = [];
                   final roomName = roomNameTextController.text;
-                  ref.read(roomChatProvider.notifier).create(emptyChatList, userIdList, emptyQuestionList, roomName);
+                  ref.read(roomChatProvider.notifier).create(roomName,userIdList);
                   Navigator.of(context).pop();
                 }
               },

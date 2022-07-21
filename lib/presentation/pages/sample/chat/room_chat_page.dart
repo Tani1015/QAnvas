@@ -60,11 +60,6 @@ class RoomChatPage extends HookConsumerWidget {
               padding: const EdgeInsets.only(left: 8).copyWith(top: 10),
               child: ListTile(
                 title: Text(data.roomName!),
-                subtitle: Text(
-                  data.chatList!.isEmpty
-                      ? "チャットしよう"
-                      : data.chatList![0].chat!
-                ),
                 onTap: () {
                   ChatPage.show(context, index);
                 },

@@ -28,38 +28,28 @@ class ChatPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     final chatRooms = ref.watch(roomChatProvider);
-    final newChatList = useState<List<Chat>>(chatRooms[index].chatList!);
+    final List<Chat> emptyList = [];
+    final newChatList = useState<List<Chat>>(emptyList);
     final userId = ref.read(firebaseAuthRepositoryProvider).loggedInUserId;
     final profile = ref.watch(fetchMyProfileProvider);
-    final List<Chat> list = [
-      Chat(
-        chatId: chatRooms[index].roomId,
-        userId: userId,
-        chat: "ui",
-        name: profile.value?.name,
-        createdAt: DateTime.now()
-      ),
-      Chat(
-        chatId: chatRooms[index].roomId,
-        userId: userId,
-        chat: "hello",
-        name: profile.value?.name,
-        createdAt: DateTime.now()
-      )
-    ];
+
 
     final _user = types.User(id: userId!, firstName:  profile.value!.name);
-    final textMessage = chatRooms[index].chatList?.map((d) =>
-        types.TextMessage(
-          author: _user,
-          id: chatRooms[index].roomId!,
-          text: d.chat!,
-          createdAt: chatRooms[index].createdAt?.millisecondsSinceEpoch
-        )).toList();
+    List<types.TextMessage>? textMessage = [];
 
     useEffectOnce(() {
       Future(() async {
         final result = await ref.read(roomChatProvider.notifier).fetch();
+        if(chatRooms[index].chatList != null){
+          newChatList.value = chatRooms[index].chatList!;
+          textMessage = chatRooms[index].chatList?.map((d) =>
+              types.TextMessage(
+                  author: _user,
+                  id: chatRooms[index].roomId!,
+                  text: d.chat!,
+                  createdAt: chatRooms[index].createdAt?.millisecondsSinceEpoch
+              )).toList();
+        }
         result.when(
           success: () {},
           failure: (_) {},
@@ -73,6 +63,17 @@ class ChatPage extends HookConsumerWidget {
       child: GestureDetector(
         onTap: useFocusNode().requestFocus,
         child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            title: Text(chatRooms[index].roomName!,
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold
+              ),
+            ),
+            centerTitle: true,
+            elevation: 0,
+          ),
           body:  chat.Chat(
             theme: const chat.DefaultChatTheme(
               // メッセージ入力欄の色
@@ -92,7 +93,7 @@ class ChatPage extends HookConsumerWidget {
                   name: profile.value?.name,
                   createdAt: DateTime.now()
               );
-              newChatList.value = list;
+              newChatList.value.add(newChat);
               ref.read(roomChatProvider.notifier)
                   .updateChat(chatRooms[index], newChatList.value);
             },

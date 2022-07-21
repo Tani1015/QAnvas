@@ -64,6 +64,14 @@ class RoomChat with _$RoomChat {
     return data;
   }
 
+  Map<String, dynamic> get toDocRoom {
+    final data = <String, dynamic> {
+      ...toJson(),
+      'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
+    }..remove('chatList')..remove('questionList');
+    return data;
+  }
+
   Map<String, dynamic> get toDocWithNotChat {
     final data = <String, dynamic> {
       ...toJson(),

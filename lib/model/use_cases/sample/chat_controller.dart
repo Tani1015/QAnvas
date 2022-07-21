@@ -72,7 +72,7 @@ class RoomChatController extends StateNotifier<List<RoomChat>> {
    }
  }
 
- Future<ResultVoidData> create(List<Chat> chatList, List<String> userList, List<Question> questionList, String roomName) async {
+ Future<ResultVoidData> create(String roomName, List<String> usersId) async {
    try{
      final userId = _firebaseAuthRepository.loggedInUserId;
      if(userId == null){
@@ -85,15 +85,13 @@ class RoomChatController extends StateNotifier<List<RoomChat>> {
      final data = RoomChat(
        roomId: ref.id,
        roomName: roomName,
-       userId: userList,
-       questionList: questionList,
-       chatList: chatList,
+       userId: usersId,
        createdAt: now
      );
 
      await _documentRepository.save(
        RoomChat.docPath(ref.id),
-       data: data.toCreateDoc,
+       data: data.toDocRoom,
      );
 
      //state変更

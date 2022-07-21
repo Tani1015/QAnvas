@@ -19,11 +19,15 @@ class NotePage extends HookConsumerWidget{
 
     final folderBox = Hive.box("Folder");
     final folderList = folderBox.get("Folder");
+    final emptyList = [];
     final useFolderList = useState<List<dynamic>>([]);
 
     useEffectOnce(() {
       if(folderList != null){
         useFolderList.value = folderList;
+      }
+      if(folderList == null){
+        folderBox.put("Folder", emptyList);
       }
       return null;
     });
@@ -63,7 +67,7 @@ class NotePage extends HookConsumerWidget{
               ValueListenableBuilder(
                 valueListenable: folderBox.listenable(keys: ['Folder']),
                 builder: (context, box, widget){
-                  return folderList.isEmpty == true
+                  return folderList == true
                       ? Column(
                           children: [
                             SizedBox(

@@ -157,7 +157,8 @@ class __$$_RoomChatCopyWithImpl<$Res> extends _$RoomChatCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_RoomChat extends _RoomChat with DiagnosticableTreeMixin {
   const _$_RoomChat(
       {this.roomId,

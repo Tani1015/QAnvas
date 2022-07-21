@@ -26,8 +26,8 @@ Map<String, dynamic> _$$_RoomChatToJson(_$_RoomChat instance) =>
       'roomId': instance.roomId,
       'roomName': instance.roomName,
       'userId': instance.userId,
-      'questionList': instance.questionList,
-      'chatList': instance.chatList,
+      'questionList': instance.questionList?.map((e) => e.toJson()).toList(),
+      'chatList': instance.chatList?.map((e) => e.toJson()).toList(),
       'createdAt':
           const DateTimeTimestampConverter().toJson(instance.createdAt),
     };

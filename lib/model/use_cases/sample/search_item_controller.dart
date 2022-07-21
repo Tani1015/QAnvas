@@ -18,26 +18,31 @@ import 'package:qanvas/results/result_void_data.dart';
 import 'package:qanvas/utils/provider.dart';
 import 'package:qanvas/utils/uuid_generator.dart';
 
-
-
-
-final itemProvider = StateNotifierProvider<ItemController, List<Item>>((ref) {
-  ref.watch(firebaseAuthRepositoryProvider);
-  return ItemController(ref.read);
+final searchTextEditingController = StateProvider.autoDispose((ref){
+  return TextEditingController(text: '');
 });
 
-class ItemController extends StateNotifier<List<Item>> {
-  ItemController(this._read,) : super([]) {
+
+final searchItemProvider = StateNotifierProvider<SearchItemController, List<Item>>((ref) {
+  ref.read(searchTextEditingController);
+  return SearchItemController(ref.read);
+});
+
+class SearchItemController extends StateNotifier<List<Item>> {
+  SearchItemController(this._read,) : super([]) {
     final userId = _firebaseAuthRepository.loggedInUserId;
     if (userId == null) {
       return;
     }
-  _collectionPagingRepository = _read(
+
+    final searchText = _searchText.text;
+
+    _collectionPagingRepository = _read(
       itemPagingProvider(
         CollectionParam<Item>(
           query: Document.colRef(
             Item.collectionPath(),
-          ).where('userId', isEqualTo: userId)
+          ).where('category', isEqualTo: searchText)
               .orderBy('createdAt',descending: true),
           decode: Item.fromJson,
         ),
@@ -46,6 +51,9 @@ class ItemController extends StateNotifier<List<Item>> {
   }
 
   final Reader _read;
+
+  TextEditingController get _searchText =>
+      _read(searchTextEditingController);
 
   FirebaseAuthRepository get _firebaseAuthRepository =>
       _read(firebaseAuthRepositoryProvider);
@@ -57,8 +65,20 @@ class ItemController extends StateNotifier<List<Item>> {
   FirebaseStorageRepository get _firebaseStorageRepository =>
       _read(firebaseStorageRepositoryProvider);
 
-  Future<ResultVoidData> fetch() async{
+  Future<ResultVoidData> fetch(String category) async{
     try{
+      _collectionPagingRepository = _read(
+        itemPagingProvider(
+          CollectionParam<Item>(
+            query: Document.colRef(
+              Item.collectionPath(),
+            ).where('category', isEqualTo: category)
+                .orderBy('createdAt',descending: true),
+            decode: Item.fromJson,
+          ),
+        ),
+      );
+
       final repository = _collectionPagingRepository;
       if(repository == null){
         throw AppException.irregular();
@@ -100,17 +120,17 @@ class ItemController extends StateNotifier<List<Item>> {
       );
       //Firestoreへの保存
       final data = Item(
-        userId: userId,
-        itemId: ref.id,
-        title: title,
-        question: question,
-        category: category,
-        imageUrl: StorageFile(
-          url: imageUrl,
-          path: imagePath,
-          mimeType: mimeType.value,
-        ),
-        createdAt: now,
+          userId: userId,
+          itemId: ref.id,
+          title: title,
+          question: question,
+          category: category,
+          imageUrl: StorageFile(
+            url: imageUrl,
+            path: imagePath,
+            mimeType: mimeType.value,
+          ),
+          createdAt: now
       );
 
       await _documentRepository.save(
@@ -163,7 +183,26 @@ class ItemController extends StateNotifier<List<Item>> {
     }
   }
 
-
-
+  Future<ResultVoidData> updateComment(Item item,List<Comment>? comment) async {
+    try{
+      final now = DateTime.now();
+      //Firestoreへの保存
+      final data = item.copyWith(
+          comment: comment,
+          createdAt: now
+      );
+      await _documentRepository.save(
+        Item.docPath(item.itemId!),
+        data: data.toDocWithComment,
+      );
+      //state変更
+      state = [data, ...state];
+      return const ResultVoidData.success();
+    }on AppException catch(e) {
+      return ResultVoidData.failure(e);
+    }on Exception catch (e) {
+      return ResultVoidData.failure(AppException.error(e.errorMessage));
+    }
+  }
 
 }

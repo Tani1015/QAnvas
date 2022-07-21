@@ -173,7 +173,8 @@ class __$$_QuestionCopyWithImpl<$Res> extends _$QuestionCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Question extends _Question with DiagnosticableTreeMixin {
   const _$_Question(
       {this.questionId,

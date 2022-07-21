@@ -24,7 +24,9 @@ final itemPagingProvider = Provider.family
 
 @freezed
 class Item with _$Item {
+  @JsonSerializable(explicitToJson: true)
   const factory Item({
+    String? userId,
     String? itemId,
     String? title,
     String? question,
@@ -38,24 +40,25 @@ class Item with _$Item {
   factory Item.fromJson(Map<String, dynamic> json) =>
       _$ItemFromJson(json);
 
-  static String collectionPath(String userId) =>
-      'QAnvas/v1/users/$userId/items';
+  static String collectionPath() =>
+      'QAnvas/v1/items';
 
-  static CollectionReference<SnapType> colRef(String userId) =>
-      Document.colRef(collectionPath(userId));
+  static CollectionReference<SnapType> colRef() =>
+      Document.colRef(collectionPath());
 
-  static String docPath(String userId, String id) =>
-      '${collectionPath(userId)}/$id';
-  static DocumentReference<SnapType> docRef(String userId, String id) =>
-      Document.docRefWithDocPath(docPath(userId, id));
+  static String docPath(String id) =>
+      '${collectionPath()}/$id';
+  static DocumentReference<SnapType> docRef(String id) =>
+      Document.docRefWithDocPath(docPath(id));
 
   static String imagePath(
     String userId,
     String id,
     String filename
-  ) => '${docPath(userId, id)}/image/$filename';
+  ) => '${docPath(id)}/image/$filename';
 
   Map<String, dynamic> get toCreateDoc => <String, dynamic> {
+    'userId' : userId,
     'itemId' : itemId,
     'title' : title,
     'question' : question,
@@ -71,6 +74,14 @@ class Item with _$Item {
       ...toJson(),
       'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
     }..remove('imageUrl');
+    return data;
+  }
+
+  Map<String, dynamic> get toDocWithComment {
+    final data = <String, dynamic> {
+      ...toJson(),
+      'createdAt' : createdAt ?? FieldValue.serverTimestamp(),
+    }..remove('userId')..remove('itemId')..remove('title')..remove('question')..remove('category')..remove('imageUrl');
     return data;
   }
 }

@@ -4,30 +4,29 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/gen/assets.gen.dart';
 import 'package:qanvas/model/entities/sample/chat/chat.dart';
 import 'package:qanvas/model/entities/sample/question/question.dart';
+import 'package:qanvas/model/entities/sample/room_chat/room_chat.dart';
 import 'package:qanvas/model/repositories/firebase_auth/firebase_auth_repository.dart';
 import 'package:qanvas/model/use_cases/sample/chat_controller.dart';
+import 'package:qanvas/model/use_cases/sample/search_user_controller.dart';
+import 'package:qanvas/presentation/custom_hooks/use_effect_once.dart';
 import 'package:qanvas/presentation/widgets/rounded_button.dart';
 
 
-final roomNameTextProvider = Provider.autoDispose((ref) {
-  return TextEditingController(text: '');
-});
+class AddUserPage extends HookConsumerWidget {
+  const AddUserPage(this.data, {Key? key}) : super(key: key);
 
-class AddRoomPage extends HookConsumerWidget {
-  const AddRoomPage({Key? key}) : super(key: key);
-
-  static Future<void> show(BuildContext context) {
+  static Future<void> show(BuildContext context, RoomChat data) {
     return Navigator.of(context).push<void>(
       MaterialPageRoute(
-        builder: (_) => const AddRoomPage(),
+        builder: (_) => AddUserPage(data),
       ),
     );
   }
+  final RoomChat? data;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final roomChats = ref.watch(roomChatProvider);
-    final roomNameTextController = ref.watch(roomNameTextProvider);
+    final searchUserTextController = ref.watch(searchUserTextEditingController);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -54,10 +53,10 @@ class AddRoomPage extends HookConsumerWidget {
               margin: EdgeInsets.all(context.width * 0.05),
               child: TextFormField(
                 autofocus: false,
-                controller: roomNameTextController,
+                controller: searchUserTextController,
                 textAlign: TextAlign.center,
                 decoration: InputDecoration(
-                  hintText: 'ルーム名を入力',
+                  hintText: 'ユーザー名を入力',
                   hintStyle: const TextStyle(fontSize: 17, color: Colors.black26),
                   fillColor: Colors.grey[400],
                   filled: true,
@@ -83,19 +82,19 @@ class AddRoomPage extends HookConsumerWidget {
             child: RoundedButton(
               color: Colors.red,
               onTap: () {
-                if(roomNameTextController.text != "") {
-                  final userId = ref.read(firebaseAuthRepositoryProvider).loggedInUserId;
-                  final List<String> userIdList = [];
-                  userIdList.add(userId!);
-                  final roomName = roomNameTextController.text;
-                  ref.read(roomChatProvider.notifier).create(roomName,userIdList);
-                  Navigator.of(context).pop();
+                if(searchUserTextController.text != "") {
+                  final users = ref.watch(searchUserProvider);
+                  ref.read(searchUserProvider.notifier).search(searchUserTextController.text);
+                  final userId = users[0].userId;
+                  var userIdList = data?.userId;
+                  userIdList = [...?userIdList, userId];
+                  ref.read(roomChatProvider.notifier).updateUser(data!, userIdList);
                 }
               },
               child: const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Text(
-                  'ルーム追加',
+                  'ユーザを追加',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.w700,

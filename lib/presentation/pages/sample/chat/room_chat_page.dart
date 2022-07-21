@@ -27,6 +27,7 @@ class RoomChatPage extends HookConsumerWidget {
     });
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
           centerTitle: true,
           elevation: 0,
@@ -53,21 +54,30 @@ class RoomChatPage extends HookConsumerWidget {
         ? const Center(
             child: Text("ルームを追加してください!"),
           )
-        : ListView.separated(
+        : ListView.builder(
           itemBuilder: (BuildContext context, int index) {
             final data = chatRooms[index];
             return Padding(
-              padding: const EdgeInsets.only(left: 8).copyWith(top: 10),
-              child: ListTile(
-                title: Text(data.roomName!),
-                onTap: () {
-                  ChatPage.show(context, index);
-                },
-              ),
+              padding: const EdgeInsets.only(left: 30).copyWith(top: 10),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200,
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(20))
+                      .copyWith(bottomLeft: const Radius.circular(20))
+                ),
+                child: ListTile(
+                  trailing: const Icon(Icons.arrow_forward_outlined),
+                  iconColor: Colors.red.shade300,
+                  title: Text(data.roomName!),
+                  subtitle: data.chatList != null
+                    ? Text(data.chatList![0].chat!)
+                    : const Text("チャットしよう!"),
+                  onTap: () {
+                    ChatPage.show(context, index);
+                  },
+                ),
+              )
             );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const Divider(height: 1);
           },
           itemCount: chatRooms.length
         ),

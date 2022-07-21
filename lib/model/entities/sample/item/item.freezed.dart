@@ -20,6 +20,7 @@ Item _$ItemFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Item {
+  String? get userId => throw _privateConstructorUsedError;
   String? get itemId => throw _privateConstructorUsedError;
   String? get title => throw _privateConstructorUsedError;
   String? get question => throw _privateConstructorUsedError;
@@ -39,7 +40,8 @@ abstract class $ItemCopyWith<$Res> {
   factory $ItemCopyWith(Item value, $Res Function(Item) then) =
       _$ItemCopyWithImpl<$Res>;
   $Res call(
-      {String? itemId,
+      {String? userId,
+      String? itemId,
       String? title,
       String? question,
       String? category,
@@ -60,6 +62,7 @@ class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? itemId = freezed,
     Object? title = freezed,
     Object? question = freezed,
@@ -69,6 +72,10 @@ class _$ItemCopyWithImpl<$Res> implements $ItemCopyWith<$Res> {
     Object? comment = freezed,
   }) {
     return _then(_value.copyWith(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       itemId: itemId == freezed
           ? _value.itemId
           : itemId // ignore: cast_nullable_to_non_nullable
@@ -118,7 +125,8 @@ abstract class _$$_ItemCopyWith<$Res> implements $ItemCopyWith<$Res> {
       __$$_ItemCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String? itemId,
+      {String? userId,
+      String? itemId,
       String? title,
       String? question,
       String? category,
@@ -141,6 +149,7 @@ class __$$_ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? userId = freezed,
     Object? itemId = freezed,
     Object? title = freezed,
     Object? question = freezed,
@@ -150,6 +159,10 @@ class __$$_ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
     Object? comment = freezed,
   }) {
     return _then(_$_Item(
+      userId: userId == freezed
+          ? _value.userId
+          : userId // ignore: cast_nullable_to_non_nullable
+              as String?,
       itemId: itemId == freezed
           ? _value.itemId
           : itemId // ignore: cast_nullable_to_non_nullable
@@ -183,10 +196,12 @@ class __$$_ItemCopyWithImpl<$Res> extends _$ItemCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Item extends _Item with DiagnosticableTreeMixin {
   const _$_Item(
-      {this.itemId,
+      {this.userId,
+      this.itemId,
       this.title,
       this.question,
       this.category,
@@ -198,6 +213,8 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
 
   factory _$_Item.fromJson(Map<String, dynamic> json) => _$$_ItemFromJson(json);
 
+  @override
+  final String? userId;
   @override
   final String? itemId;
   @override
@@ -222,7 +239,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Item(itemId: $itemId, title: $title, question: $question, category: $category, createdAt: $createdAt, imageUrl: $imageUrl, comment: $comment)';
+    return 'Item(userId: $userId, itemId: $itemId, title: $title, question: $question, category: $category, createdAt: $createdAt, imageUrl: $imageUrl, comment: $comment)';
   }
 
   @override
@@ -230,6 +247,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'Item'))
+      ..add(DiagnosticsProperty('userId', userId))
       ..add(DiagnosticsProperty('itemId', itemId))
       ..add(DiagnosticsProperty('title', title))
       ..add(DiagnosticsProperty('question', question))
@@ -244,6 +262,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_Item &&
+            const DeepCollectionEquality().equals(other.userId, userId) &&
             const DeepCollectionEquality().equals(other.itemId, itemId) &&
             const DeepCollectionEquality().equals(other.title, title) &&
             const DeepCollectionEquality().equals(other.question, question) &&
@@ -257,6 +276,7 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(userId),
       const DeepCollectionEquality().hash(itemId),
       const DeepCollectionEquality().hash(title),
       const DeepCollectionEquality().hash(question),
@@ -278,7 +298,8 @@ class _$_Item extends _Item with DiagnosticableTreeMixin {
 
 abstract class _Item extends Item {
   const factory _Item(
-      {final String? itemId,
+      {final String? userId,
+      final String? itemId,
       final String? title,
       final String? question,
       final String? category,
@@ -289,6 +310,8 @@ abstract class _Item extends Item {
 
   factory _Item.fromJson(Map<String, dynamic> json) = _$_Item.fromJson;
 
+  @override
+  String? get userId => throw _privateConstructorUsedError;
   @override
   String? get itemId => throw _privateConstructorUsedError;
   @override

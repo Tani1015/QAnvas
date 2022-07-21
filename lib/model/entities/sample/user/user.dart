@@ -1,12 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:qanvas/model/entities/sample/item/item.dart';
 
 import 'package:qanvas/model/entities/storage_file/storage_file.dart';
+import 'package:qanvas/model/repositories/firestore/collection_paging_repository.dart';
 import 'package:qanvas/model/repositories/firestore/document.dart';
 
 
 part 'user.freezed.dart';
 part 'user.g.dart';
+
+final userPagingProvider = Provider.family
+    .autoDispose<CollectionPagingRepository<User>, CollectionParam<User>>(
+        (ref, query) {
+      return CollectionPagingRepository<User>(
+          query: query.query,
+          decode: query.decode
+      );
+    }
+);
 
 @freezed
 class User with _$User {

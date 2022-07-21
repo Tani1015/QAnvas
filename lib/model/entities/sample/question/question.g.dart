@@ -24,7 +24,7 @@ Map<String, dynamic> _$$_QuestionToJson(_$_Question instance) =>
       'userId': instance.userId,
       'question': instance.question,
       'name': instance.name,
-      'comment': instance.comment,
+      'comment': instance.comment?.toJson(),
       'createdAt':
           const DateTimeTimestampConverter().toJson(instance.createdAt),
     };

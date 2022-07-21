@@ -10,6 +10,7 @@ part 'question.g.dart';
 
 @freezed
 class Question with _$Question {
+  @JsonSerializable(explicitToJson: true)
   const factory Question({
     String? questionId,
     String? userId,

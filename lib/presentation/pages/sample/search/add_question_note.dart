@@ -80,7 +80,7 @@ class AddQuestionNotePageState extends State<AddQuestionNotePage> with SingleTic
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final textheight = MediaQuery.of(context).viewInsets.bottom;
+    final textheight = MediaQuery.of(context).viewInsets.bottom * 0.8;
     final local = Hive.box("Local");
     Future<Uint8List?>? imageFuture;
 

@@ -8,6 +8,7 @@ import 'package:qanvas/model/entities/sample/user/user.dart';
 import 'package:qanvas/model/use_cases/sample/item_controller.dart';
 import 'package:qanvas/model/use_cases/sample/my_profile.dart';
 import 'package:qanvas/presentation/custom_hooks/use_effect_once.dart';
+import 'package:qanvas/presentation/pages/sample/user/select_user_item_page.dart';
 import 'package:qanvas/presentation/pages/sample/user/user_edit_page.dart';
 import 'package:qanvas/presentation/widgets/thumbnail.dart';
 
@@ -96,10 +97,15 @@ class UserPage extends HookConsumerWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 8),
+                                padding: const EdgeInsets.only(left: 8).copyWith(top: 10),
                                 child: ListTile(
                                   title: Text(data.title!),
                                   subtitle: Text(data.question!),
+                                  trailing: const Icon(Icons.arrow_forward),
+                                  iconColor: Colors.black,
+                                  onTap: () {
+                                    SelectUserItemPage.show(context, data);
+                                  },
                                 ),
                               )
                             ],

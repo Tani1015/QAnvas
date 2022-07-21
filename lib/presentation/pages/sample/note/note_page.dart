@@ -18,13 +18,12 @@ class NotePage extends HookConsumerWidget{
     final height = MediaQuery.of(context).size.height;
 
     final folderBox = Hive.box("Folder");
-    final List<String> emptyList = [];
     final folderList = folderBox.get("Folder");
-    final useFolderList = useState<List<dynamic>>(folderList);
+    final useFolderList = useState<List<dynamic>>([]);
 
     useEffectOnce(() {
-      if(folderList == null){
-        folderBox.put("Folder", emptyList);
+      if(folderList != null){
+        useFolderList.value = folderList;
       }
       return null;
     });
@@ -43,59 +42,65 @@ class NotePage extends HookConsumerWidget{
             ),
             centerTitle: true,
             backgroundColor: Colors.white,
-            elevation: 0,
+            elevation: 0.5,
+            leadingWidth: weight * 0.25,
+            leading: Padding(
+              padding: const EdgeInsets.only(top: 13).copyWith(left: 5),
+              child: const Text("ノート",
+                textAlign: TextAlign.start,
+                style:  TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold
+                ),
+              ),
+            )
           ),
         ),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              SizedBox(
-                width: double.infinity,
-                child: Padding(
-                  padding: EdgeInsets.only(left: weight * 0.05,bottom: height * 0.01),
-                  child: const Text("ノート",
-                    textAlign: TextAlign.start,
-                    style:  TextStyle(
-                        fontSize: 26,
-                        fontWeight: FontWeight.bold
-                    ),
-                  ),
-                ),
-              ),
-              const Divider(color: Colors.black,
-                height: 0.5,
-              ),
               ValueListenableBuilder(
                 valueListenable: folderBox.listenable(keys: ['Folder']),
                 builder: (context, box, widget){
-                  return folderList.isEmpty == null
+                  return folderList.isEmpty == true
                       ? Column(
-                    children: [
-                      SizedBox(
-                        height: height * 0.5,
-                        child: Padding(
-                          padding: EdgeInsets.only(top: height * 0.1),
-                          child: Image.asset("assets/images/QAnvas_splash2.png"),
-                        ),
-                      ),
-                      const Text("ノートを追加してください!!")
-                    ],
-                  )
-                      : ListView.separated(
+                          children: [
+                            SizedBox(
+                              height: height * 0.5,
+                              child: Padding(
+                                padding: EdgeInsets.only(top: height * 0.1),
+                                child: Image.asset("assets/images/QAnvas_splash2.png"),
+                              ),
+                            ),
+                            const Text("ノートを追加してください!!")
+                          ],
+                      )
+                      : ListView.builder(
                     shrinkWrap: true,
                     itemCount: folderList.length,
                     itemBuilder: (BuildContext context, int index) {
                       return GestureDetector(
                         child: Slidable(
-                          child: ListTile(
-                            tileColor: Colors.white,
-                            title: Text(
-                              folderList[index],
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 23,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.grey.shade300,
+                                borderRadius: BorderRadius.circular(20)
                               ),
-                            ),
+                              child: ListTile(
+                                tileColor: Colors.white,
+                                title: Text(
+                                  folderList[index],
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 23,
+                                  ),
+                                ),
+                              ),
+
+                            )
                           ),
                           endActionPane: ActionPane(
                               motion: const DrawerMotion(),
@@ -121,9 +126,6 @@ class NotePage extends HookConsumerWidget{
                         },
                       );
                     },
-                    separatorBuilder: (BuildContext context, int index) {
-                      return const Divider(height:  0.5);
-                    },
                   );
                 },
               ),
@@ -134,13 +136,11 @@ class NotePage extends HookConsumerWidget{
           margin: EdgeInsets.only(bottom: height * 0.01),
           child: FloatingActionButton.extended(
             onPressed: () {
-              Navigator.of(context).push<void>(
+              Navigator.of(context,rootNavigator: true).push<void>(
                 MaterialPageRoute(
                   builder: (_) => const MakeNotePage(),
                 ),
               );
-              print(useFolderList.value);
-              print(folderList);
             },
             label:  const Text("ノートを作る"),
             backgroundColor: Colors.blue,

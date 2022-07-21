@@ -12,6 +12,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/gen/assets.gen.dart';
 import 'package:qanvas/model/use_cases/sample/item_controller.dart';
 import 'package:qanvas/presentation/custom_hooks/use_effect_once.dart';
+import 'package:qanvas/presentation/pages/main/main_page.dart';
 import 'package:qanvas/presentation/pages/sample/search/add_question_note.dart';
 import 'package:qanvas/presentation/widgets/rounded_button.dart';
 
@@ -213,7 +214,7 @@ class MakeQuestionImagePage extends HookConsumerWidget {
                         if(title != "" && category != "" && question != ""){
                           await itemNotifier.create(title,question, category, image);
                           local.delete("Local");
-                          Navigator.pop(context);
+                          MainPage.show(context);
                         }
                       } on Exception catch (e) {
                         await showOkAlertDialog(context: context, title: '保存できませんでした');

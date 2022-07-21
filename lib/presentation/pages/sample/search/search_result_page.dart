@@ -4,6 +4,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get_utils/src/extensions/context_extensions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/model/use_cases/sample/item_controller.dart';
+import 'package:qanvas/model/use_cases/sample/search_item_controller.dart';
+import 'package:qanvas/presentation/custom_hooks/use_effect_once.dart';
+import 'package:qanvas/presentation/pages/sample/search/select_search_result_page.dart';
 import 'package:qanvas/presentation/widgets/thumbnail.dart';
 
 
@@ -11,7 +14,7 @@ class SearchResultPage extends HookConsumerWidget{
   const SearchResultPage({Key? key}) : super(key: key);
 
   static Future<void> show(BuildContext context) {
-    return Navigator.of(context, rootNavigator: true).push<void>(
+    return Navigator.of(context).push<void>(
       MaterialPageRoute(
         builder: (_) => const SearchResultPage(),
       ),
@@ -21,8 +24,16 @@ class SearchResultPage extends HookConsumerWidget{
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final searchTextController = ref.watch(searchTextEditingController);
-    final items = ref.watch(itemProvider);
+    final items = ref.read(searchItemProvider);
     final scrollController = useScrollController();
+
+    useEffectOnce(() {
+      Future(() async {
+        final result = await ref.read(searchItemProvider.notifier).fetch(searchTextController.text);
+        result.when(success: () {}, failure: (e) {print(e);});
+      });
+      return null;
+    });
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -56,7 +67,7 @@ class SearchResultPage extends HookConsumerWidget{
                 ),
               ),
             ),
-            const Divider(height:  0.5),
+            const Divider(height: 2),
             ListView.separated(
               controller: scrollController,
               shrinkWrap: true,
@@ -65,9 +76,7 @@ class SearchResultPage extends HookConsumerWidget{
                   return GestureDetector(
                     child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: Card(
-                        color: Colors.white,
-                        child: Column(
+                      child: Column(
                           children: [
                             data.imageUrl?.url == null
                                 ? const SizedBox()
@@ -76,7 +85,7 @@ class SearchResultPage extends HookConsumerWidget{
                               height: context.height * 0.40,
                               decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(color: Colors.black)
+                                  border: Border.all(color: Colors.grey.shade200)
                               ),
                               child: Thumbnail(
                                 height: context.height * 0.4,
@@ -107,22 +116,17 @@ class SearchResultPage extends HookConsumerWidget{
                                 )
                               ],
                             ),
-                            data.comment == null
-                                ? const SizedBox()
-                                : Text(data.comment![0].comment!)
                           ],
                         ),
-                        clipBehavior: Clip.antiAliasWithSaveLayer,
-                      )
                     ),
                     onTap: () {
                       //画面遷移　selectSelectNotePage.show(context, index);
-                      //
+                      SelectSearchResultPage.show(context, items[index]);
                     },
                   );
                 },
                 separatorBuilder: (BuildContext context, int index) {
-                  return const Divider(height:  0.5);
+                  return const Divider(height:  3);
                 },
                 itemCount: items.length
             )

@@ -7,6 +7,7 @@ part of 'item.dart';
 // **************************************************************************
 
 _$_Item _$$_ItemFromJson(Map<String, dynamic> json) => _$_Item(
+      userId: json['userId'] as String?,
       itemId: json['itemId'] as String?,
       title: json['title'] as String?,
       question: json['question'] as String?,
@@ -22,12 +23,13 @@ _$_Item _$$_ItemFromJson(Map<String, dynamic> json) => _$_Item(
     );
 
 Map<String, dynamic> _$$_ItemToJson(_$_Item instance) => <String, dynamic>{
+      'userId': instance.userId,
       'itemId': instance.itemId,
       'title': instance.title,
       'question': instance.question,
       'category': instance.category,
       'createdAt':
           const DateTimeTimestampConverter().toJson(instance.createdAt),
-      'imageUrl': instance.imageUrl,
-      'comment': instance.comment,
+      'imageUrl': instance.imageUrl?.toJson(),
+      'comment': instance.comment?.map((e) => e.toJson()).toList(),
     };

@@ -125,9 +125,10 @@ class __$$_CommentCopyWithImpl<$Res> extends _$CommentCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$_Comment extends _Comment {
-  _$_Comment({this.userId, this.comment, this.comImageurl}) : super._();
+  const _$_Comment({this.userId, this.comment, this.comImageurl}) : super._();
 
   factory _$_Comment.fromJson(Map<String, dynamic> json) =>
       _$$_CommentFromJson(json);
@@ -175,11 +176,11 @@ class _$_Comment extends _Comment {
 }
 
 abstract class _Comment extends Comment {
-  factory _Comment(
+  const factory _Comment(
       {final String? userId,
       final String? comment,
       final StorageFile? comImageurl}) = _$_Comment;
-  _Comment._() : super._();
+  const _Comment._() : super._();
 
   factory _Comment.fromJson(Map<String, dynamic> json) = _$_Comment.fromJson;
 

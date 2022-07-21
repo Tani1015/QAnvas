@@ -18,5 +18,5 @@ Map<String, dynamic> _$$_CommentToJson(_$_Comment instance) =>
     <String, dynamic>{
       'userId': instance.userId,
       'comment': instance.comment,
-      'comImageurl': instance.comImageurl,
+      'comImageurl': instance.comImageurl?.toJson(),
     };

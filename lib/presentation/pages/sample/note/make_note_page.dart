@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:qanvas/presentation/pages/main/main_page.dart';
 import 'package:spring_button/spring_button.dart';
 import 'package:flutter_painter/flutter_painter.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -79,7 +80,7 @@ class MakeNotePageState extends State<MakeNotePage> with SingleTickerProviderSta
     //端末ごとの高さと横幅を取得
     final weight = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final textheight = MediaQuery.of(context).viewInsets.bottom;
+    final textheight = MediaQuery.of(context).viewInsets.bottom * 0.8;
 
     final TextEditingController noteNameController = TextEditingController();
     final folderBox = Hive.box("Folder");
@@ -197,7 +198,7 @@ class MakeNotePageState extends State<MakeNotePage> with SingleTickerProviderSta
                                         //画像エンコード
                                         imageFuture!.then((value) {
                                           noteBox.put(noteNameText, value);
-                                          Navigator.of(context).pop();
+                                          MainPage.show(context);
                                         });
                                       },
                                     ),

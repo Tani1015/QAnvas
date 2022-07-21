@@ -30,7 +30,7 @@ class RoomChatController extends StateNotifier<List<RoomChat>> {
        CollectionParam<RoomChat>(
          query: Document.colRef(
            RoomChat.collectionPath,
-         ).where('userId', arrayContains: userId),
+         ).where('userId', arrayContains: userId).orderBy('createdAt'),
          decode: RoomChat.fromJson,
        ),
      ),
@@ -166,29 +166,48 @@ class RoomChatController extends StateNotifier<List<RoomChat>> {
        throw AppException.irregular();
      }
 
-     final ref = Document.docRef(RoomChat.collectionPath);
-     // final now = DateTime.now();
-     // final name = _firebaseAuthRepository.authUser?.displayName;
-     //
-     // Chat newChat = Chat(
-     //     chatId: ref.id,
-     //     userId: userId,
-     //     chat: chat,
-     //     name: name,
-     //     createdAt: now
-     // );
-
-     // final List<Chat>? newChatList = roomChat.chatList;
-     // newChatList?.add(newChat);
+     final now = DateTime.now();
 
      final data = roomChat.copyWith(
          chatList: chat,
-         createdAt: roomChat.createdAt
+         createdAt: now
      );
 
      await _documentRepository.update(
          RoomChat.docPath(roomChat.roomId!),
          data: data.toDocWithNotQuestion
+     );
+
+     state = state
+         .map(
+             (e) => e.roomId == roomChat.roomId ? roomChat : e)
+         .toList();
+     return const ResultVoidData.success();
+   } on AppException catch (e) {
+     return ResultVoidData.failure(e);
+   } on Exception catch (e) {
+     return ResultVoidData.failure(AppException.error(e.errorMessage));
+   }
+ }
+
+ Future<ResultVoidData> updateUser(RoomChat roomChat, List<String>? userId) async {
+   try{
+
+     final docId = roomChat.roomId;
+     if (docId == null) {
+       throw AppException.irregular();
+     }
+
+     final now = DateTime.now();
+
+     final data = roomChat.copyWith(
+         userId: userId,
+         createdAt: now
+     );
+
+     await _documentRepository.update(
+         RoomChat.docPath(roomChat.roomId!),
+         data: data.toDocWithUser
      );
 
      state = state

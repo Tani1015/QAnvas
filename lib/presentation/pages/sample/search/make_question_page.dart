@@ -185,7 +185,7 @@ class MakeQuestionPage extends HookConsumerWidget {
                     elevation: 2,
                     onTap: () async {
                       try {
-                        Navigator.of(context).push<void>(
+                        Navigator.of(context,rootNavigator: true).push<void>(
                           MaterialPageRoute(
                             builder: (_) => const AddQuestionNotePage(),
                           ),

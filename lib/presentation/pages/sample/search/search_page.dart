@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:qanvas/extensions/context_extension.dart';
-import 'package:qanvas/model/use_cases/sample/item_controller.dart';
+import 'package:qanvas/model/use_cases/sample/search_item_controller.dart';
 import 'package:qanvas/presentation/pages/sample/search/make_question_page.dart';
 import 'package:qanvas/presentation/pages/sample/search/search_result_page.dart';
 

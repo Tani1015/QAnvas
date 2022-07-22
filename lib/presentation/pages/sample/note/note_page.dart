@@ -25,8 +25,7 @@ class NotePage extends HookConsumerWidget{
     useEffectOnce(() {
       if(folderList != null){
         useFolderList.value = folderList;
-      }
-      if(folderList == null){
+      }else if(folderList == null){
         folderBox.put("Folder", emptyList);
       }
       return null;
@@ -67,7 +66,7 @@ class NotePage extends HookConsumerWidget{
               ValueListenableBuilder(
                 valueListenable: folderBox.listenable(keys: ['Folder']),
                 builder: (context, box, widget){
-                  return folderList == true
+                  return folderList == null
                       ? Column(
                           children: [
                             SizedBox(

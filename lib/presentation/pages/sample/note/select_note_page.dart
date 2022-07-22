@@ -26,7 +26,7 @@ class SelectNotePage extends HookConsumerWidget{
     final folderBox = Hive.box("Folder");
     final noteBox = Hive.box("Note");
     final folderList = folderBox.get("Folder");
-    final useFolderList = useState<List<String>>(folderList);
+    final useFolderList = useState<List<dynamic>>(folderList);
     final image = noteBox.get(useFolderList.value[index]);
 
     return Scaffold(
